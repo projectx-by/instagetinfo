@@ -19,7 +19,40 @@
       <h1 class="d-flex justify-content-center" style="font-size: 5vw;">instaGetinfo</h1>
   <div class="container-fluid" style="margin-top: 4vw;">
     <span class="d-flex justify-content-center">
-      <input class="bg-secondary text-dark rounded-start fs-5 lh-sm" type="text" aria-label="Search" placeholder="ex: 0xwildcard" style="border:none;outline:none; height:40px;" id="keyword" onkeypress="search()">
+      <!-- Button trigger modal -->
+<button type="button" class="rounded-start" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btn-radio" style="outline: none;border:none;">
+  <span id="btn-checked">Username</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+  <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+</svg>
+</button>
+
+<!-- Modal -->
+<div class="modal fade text-dark" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Get User Information by</h1>
+        <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+      </div>
+      <div class="modal-body">
+        <div>
+        <input type="radio" name="getinfoby" id="input-username" value="username" checked/>
+        <label for="input-username">Username</label>
+        </div>
+        <div>
+        <input type="radio" name="getinfoby" id="input-userID" value="userID"/>
+        <label for="input-userID">User ID</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-radio-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <input class="bg-secondary text-dark fs-5 lh-sm" type="text" aria-label="Search" style="border:none;outline:none; height:40px;" placeholder="ex: 0xwildcard" id="keyword" onkeypress="search()">
       <button class="bg-secondary rounded-end" type="button" style="border:none;outline:none;" id="searchBtn">
        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 24 24">
 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>

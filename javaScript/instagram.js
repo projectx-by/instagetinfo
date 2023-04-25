@@ -1,6 +1,10 @@
-let inputForm,searchBtn,userInfo;
+let inputForm,searchBtn,userInfo,radioBtn,radioBtnClose;
 inputForm = document.getElementById('keyword');
 searchBtn = document.getElementById('searchBtn');
+radioBtn = document.getElementById('btn-radio');
+radioBtnClose = document.getElementById('btn-radio-close');
+let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
+let getByID = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info_by_id';
 let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 let elementFooter = document.getElementById('footer');
 let elementContainer = document.getElementById('container');
@@ -43,11 +47,20 @@ loadingEvent.innerHTML = `<div class="loader">
 </div>`;
 let profilePicture,fullName,userName,userID,biography,biographyLinks,followerCount,followingCount,parentBioLinks,linkProfile,printElementResult;
 inputForm.addEventListener('input', (e) => {
-  userInfo.body = `{"username": "${e.target.value}" }`;
-   return userInfo.body;
+  if(document.getElementById('input-username').checked == true){
+  return userInfo.body = `{"username": "${e.target.value}" }`;
+  }else{
+  return userInfo.body = `{"id": ${e.target.value} }`;
+  }
 })
 
-async function search(){
+function search(){
+  execute();
+}
+searchBtn.addEventListener('click', () => {
+  execute();
+})
+async function execute(){
   if(elementContainer.querySelector('#result') != null){
     elementContainer.querySelector('#result').remove();
   }
@@ -55,40 +68,52 @@ async function search(){
     elementContainer.querySelector('#error').remove();
   }
   elementContainer.childNodes[0].after(loadingEvent);
-  let result = await getInfo(userInfo);
+  let result;
+  if(document.getElementById('input-username').checked == true){
+    result = await getInfo(getByUsername,userInfo);
+  }else{
+    result = await getInfo(getByID,userInfo);
+    if(result.status == 'timeout' || result.status == 'error' || result.status_code == 404){
+      printResult(result);
+    }else{
+    userInfo.body = `{"username": "${result.response.body.user.username}" }`;
+    result = await getInfo(getByUsername,userInfo);
+    }
+  }
   printResult(result);
   setTimeout(function() {
     elementContainer.childNodes[1].remove();
     printElementResult.classList.remove("d-none");
   }, 5000);
 }
-searchBtn.addEventListener('click', async () => {
-  if(elementContainer.querySelector('#result') != null){
-    elementContainer.querySelector('#result').remove();
-  }
-  if(elementContainer.querySelector('#error') != null){
-    elementContainer.querySelector('#error').remove();
-  }
-  elementContainer.childNodes[0].after(loadingEvent);
-  let result = await getInfo(userInfo);
-  printResult(result);
-  setTimeout(function() {
-    elementContainer.childNodes[1].remove();
-    printElementResult.classList.remove("d-none");
-  }, 5000);
-})
 
 inputForm.addEventListener("focusin",() => {
   searchBtn.classList.remove("bg-secondary");
+  radioBtn.classList.add("bg-secondary");
 })
 inputForm.addEventListener("focusout",() => {
   searchBtn.classList.add("bg-secondary");
+  radioBtn.classList.remove("bg-secondary");
+})
+radioBtnClose.addEventListener('click',() => {
+  inputForm.value = '';
+  userInfo.body = '';
+  let username = document.getElementById('input-username');
+  let userID = document.getElementById('input-userID');
+  let btnChecked = document.getElementById('btn-checked');
+  if(username.checked == true){
+    btnChecked.textContent = 'Username';
+    inputForm.setAttribute('placeholder','ex: 0xwildcard');
+  }else{
+    btnChecked.textContent = 'User ID'
+    inputForm.setAttribute('placeholder','ex: 7430039768');
+  }
 })
 function printResult(arg){
   if(arg.status == 'error' || arg.status == 'timeout' || arg.response.status_code == 404){
     let errorMessage = `<p>
     <span class="text-danger">Oops! </span><span class="">This is awkward... You are looking for something that doesn't actually exist.</span><br>
-    <span>Please, check your connection and username then try again.</span>
+    <span>Please, check your connection and Username or userID then try again.</span>
     </p>
     <h4>404 NOT FOUND</h4>`;
   let divError = document.createElement("div");
@@ -111,6 +136,7 @@ function printResult(arg){
   linkProfile = document.getElementById('link-profile').setAttribute('href',arg.response.body.data.user.profile_pic_url_hd);
   fullName = document.getElementById('full-name').textContent = arg.response.body.data.user.full_name;
   userName = document.getElementById('username').textContent = `Username: ${arg.response.body.data.user.username}`;
+  // response.body.user.username by ID
   userID = document.getElementById('uid').textContent = `UID: ${arg.response.body.data.user.id}`;
   biography = document.getElementById('bio').textContent = arg.response.body.data.user.biography;
   followerCount = document.getElementById('follower-count');
@@ -134,7 +160,7 @@ function latestPost(post){
   let postdivElements = document.getElementById('latest-post');
   if(latest.length == 0){
     if(postdivElements.hasChildNodes){
-      postdiv.textContent = '';
+      postdivElements.textContent = '';
     }
     let noPost = document.createElement('div');
     noPost.setAttribute('style','margin-left: 45vw;');
@@ -243,8 +269,8 @@ function counterAnimation(resAPI,strObject,elements){
 		'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
 	}
 };
-function getInfo(user){
- return fetch("https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info", user)
+function getInfo(getBy,user){
+ return fetch(getBy, user)
 	.then(response => response.json())
 	.then(response => response);
 }

@@ -1,10 +1,10 @@
-input{
-    width: 50vw;
+input[type="text"]{
+    width: 30vw;
     transition: width 1s;
   }
-input:focus{
+input[type="text"]:focus{
       outline: none;
-      width: 70vw ;
+      width: 40vw ;
       transition: width 2s;
     }
 ::placeholder {
@@ -20,6 +20,9 @@ input:focus{
 input[type="text"]{
   box-sizing: border-box;
   padding-left: 10px;
+}
+button #btn-radio{
+  width: 10vw;
 }
 .loader {
   position: absolute;
