@@ -56,7 +56,6 @@ async function search(){
   }
   elementContainer.childNodes[0].after(loadingEvent);
   let result = await getInfo(userInfo);
-  console.log(result);
   printResult(result);
   setTimeout(function() {
     elementContainer.childNodes[1].remove();
@@ -72,7 +71,6 @@ searchBtn.addEventListener('click', async () => {
   }
   elementContainer.childNodes[0].after(loadingEvent);
   let result = await getInfo(userInfo);
-  console.log(result);
   printResult(result);
   setTimeout(function() {
     elementContainer.childNodes[1].remove();
