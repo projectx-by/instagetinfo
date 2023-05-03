@@ -86,6 +86,7 @@ async function execute() {
       result = await getInfo(getByUsername, userInfo);
     }
   }
+  console.log(result);
   printResult(result);
   setTimeout(function () {
     elementContainer.childNodes[1].remove();
@@ -223,6 +224,13 @@ function latestPost(post) {
     }
   }
 }
+function getChildPost(arg){
+  let childPostBody = ``
+let childPostContent = `<div class="carousel-item">
+      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">
+    </div>`;
+}
+
 function addClass(element, value) {
   for (content of value) {
     element.classList.add(content);
