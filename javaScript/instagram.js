@@ -191,8 +191,8 @@ function latestPost(post) {
     <div class="g-0">
       <div class="card-body" id="card-body-${i}">
         <p id="links-post-${i}">
-          <button type="button" class="btn btn-light">
-            <a class="text-decoration-none text-dark" id="link-${i}" target="_blank">Visit</a>
+          <button type="button" class="btn btn-light" data-bs-target="#exampleModal" data-bs-toggle="modal" id="btn-detail-${i}">
+            Details
             </button>
         </p>
       </div>
@@ -203,7 +203,7 @@ function latestPost(post) {
       cardBody.innerHTML = card;
       postdivElements.appendChild(cardBody);
       let cardCap = document.getElementById(`card-body-${i}`);
-      let linksPost = document.getElementById(`links-post-${i}`);
+      let btnPostDetail = document.getElementById(`btn-detail-${i}`);
       if (latest[i].node.accessibility_caption != null) {
         let h4 = document.createElement("h4");
         h4.textContent = latest[i].node.accessibility_caption;
@@ -213,22 +213,55 @@ function latestPost(post) {
         let p = document.createElement("p");
         p.setAttribute("class", "card-text");
         p.textContent = latest[i].node.edge_media_to_caption.edges[0].node.text;
-        cardCap.insertBefore(p, linksPost);
+        cardCap.insertBefore(p, btnPostDetail);
       }
-      let aLinks = document.getElementById(`link-${i}`);
-      if (latest[i].node.__typename == "GraphImage" || latest[i].node.__typename == "GraphSidecar") {
+      // let aLinks = document.getElementById(`link-${i}`);
+      if (latest[i].node.__typename == "GraphImage") {
         aLinks.setAttribute("href", latest[i].node.display_url);
-      } else {
+      }else if(latest[i].node.__typename == "GraphSidecar"){
+        getChildPost(latest[i].node);
+      }else {
         aLinks.setAttribute("href", latest[i].node.video_url);
       }
     }
   }
 }
 function getChildPost(arg){
-  let childPostBody = ``
-let childPostContent = `<div class="carousel-item">
-      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">
-    </div>`;
+  let divModal = document.createElement('div');
+  divModal.setAttribute('id','divModal');
+  let childPostBody = `<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body" style="padding: 0px;">
+<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
+  <div class="carousel-inner" id="div-list-items">
+  <!-- DIV IMAGE CONTENT -->
+    <div class="carousel-item active">
+      <!-- TAG IMAGE HERE FIRST-->
+      <img src="${proxyHeroku+arg.edge_sidecar_to_children.edges[0].node.display_url}" class="d-block w-100" alt="images-0" crossorigin="anonymous">
+    </div>
+  </div>
+  <button class="carousel-control-prev bg-dark rounded-end button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev" style="height: 50px; width: 35px; margin-top: 150px;" id="prev">
+    <span class="carousel-control-prev-icon" style="text-shadow: 2px 2px 2px black;"></span>
+  </button>
+  <button class="carousel-control-next bg-dark rounded-start button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next" style="height: 50px; width: 35px; margin-top: 150px;">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+      </div>
+    </div>
+  </div>
+</div>`;
+let divListItems = document.getElementById('div-list-items');
+for(i = 1; i < arg.edge_sidecar_to_children.edges.length; i++){
+let childPostContentDivImages = document.createElement('div');
+childPostContentDivImages.setAttribute('class','carousel-item');
+  let childPostContentImages = `<img src="${proxyHeroku+arg.edge_sidecar_to_children.edges[i].node.display_url}" class="d-block w-100" alt="images-${i}" crossorigin="anonymous">`;
+  childPostContentDivImages.innerHTML = childPostContentImages;
+  divListItems.appendChild(childPostContentDivImages);
+}
+divModal.innerHTML = childPostBody;
+elementContainer.insertBefore(divModal,elementFooter);
 }
 
 function addClass(element, value) {
