@@ -22,50 +22,25 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <!--<div class="modal-header" style="height: 1px;">-->
-      <!--  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-      <!--</div>-->
       <div class="modal-body" style="padding: 0px;">
-<!--       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">-->
-<!--  <div class="carousel-inner">-->
-<!--    <div class="carousel-item active">-->
-<!--      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">-->
-<!--    </div>-->
-<!--    <div class="carousel-item">-->
-<!--      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">-->
-<!--    </div>-->
-<!--    <div class="carousel-item">-->
-<!--      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">-->
-<!--    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--    <span class="visually-hidden">Previous</span>-->
-<!--  </button>-->
-<!--  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">-->
-<!--    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--    <span class="visually-hidden">Next</span>-->
-<!--  </button>-->
-<!--</div>-->
 <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="./asset/example-0.jpg" class="d-block w-100" alt="...">
+      <img src="https://cors-anywhere.herokuapp.com/https://instagram.fotp8-1.fna.fbcdn.net/v/t51.2885-15/328437971_530470682398817_8735850046409224491_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fotp8-1.fna.fbcdn.net&_nc_cat=105&_nc_ohc=BvPeu0f4rDIAX8iQej3&edm=AOQ1c0wBAAAA&ccb=7" class="d-block w-100" alt="..." crossorigin="anonymous">
+      </div>
+      <div class="carousel-item">
+      <img src="https://cors-anywhere.herokuapp.com/https://instagram.fotp8-1.fna.fbcdn.net/v/t51.2885-15/328440938_737202151313044_1722498512902579125_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fotp8-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=g" class="d-block w-100" alt="..."crossorigin="anonymous">
+      </div>
+      <div class="carousel-item">
+      <img src="https://cors-anywhere.herokuapp.com/https://instagram.fotp8-1.fna.fbcdn.net/v/t51.2885-15/328687778_1600998573656972_3424188611031452642_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fotp8-1.fna.fbcdn.net&_nc_cat=108&_nc_ohc=bOvCaF9--KMAX8-jwSx&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_" class="d-block w-100" alt="..." crossorigin="anonymous">
+      </div>
     </div>
   </div>
-  <button class="carousel-control-prev bg-dark rounded-end button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev" style="height: 50px; width: 35px; margin-top: 150px;" id="prev">
+  <button class="carousel-control-prev bg-dark rounded-end button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev" style="height: 50px; width: 35px; margin-top: 225px;" id="prev">
     <span class="carousel-control-prev-icon" style="text-shadow: 2px 2px 2px black;"></span>
-    <!--<span class="visually-hidden">Previous</span>-->
   </button>
-  <button class="carousel-control-next bg-dark rounded-start button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next" style="height: 50px; width: 35px; margin-top: 150px;">
+  <button class="carousel-control-next bg-dark rounded-start button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next" style="height: 50px; width: 35px; margin-top: 225px;">
     <span class="carousel-control-next-icon"></span>
-    <!--<span class="visually-hidden">Next</span>-->
   </button>
 </div>
       </div>
@@ -78,9 +53,15 @@
     let buttonControl = document.getElementsByClassName('button-control');
     buttonControl[0].addEventListener("focusin", () => {
       buttonControl[1].style.opacity = 1;
+      if(buttonControl[1].style.opacity == 1){
+        buttonControl[0].style.opacity = 1;
+      }
     } )
     buttonControl[1].addEventListener("focusin", () => {
       buttonControl[0].style.opacity = 1;
+      if(buttonControl[0].style.opacity == 1){
+        buttonControl[1].style.opacity = 1;
+      }
     } )
     </script>
   </body>
