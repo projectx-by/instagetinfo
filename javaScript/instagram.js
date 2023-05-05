@@ -34,51 +34,40 @@ function profile(res) {
   profileDiv.setAttribute('class', 'card')
   profileDiv.classList.add('mb-3');
   profileDiv.classList.add('bg-dark');
+  profileDiv.classList.add('mx-3');
   profileDiv.setAttribute('style', 'max-width: 500px; outline:none; border:none;');
   profileDiv.setAttribute('id', 'profileDiv');
-  profileDiv.innerHTML =
-  // `<div class="row g-0">
-  //   <div class="col-md-4">
-  //   <div class="image-profile rounded-circle bg-danger d-flex justify-content-center">
-  //     <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" alt="profile-picture" crossorigin="anonymous">
-  //   </div>
-  //   </div>
-  //   <div class="col-md-8">
-  //     <div class="card-body bg-dark text-white">
-  //       <div class="d-flex justify-content-center">
-  //       <p class="card-text" id="full-name">${res.response.body.data.user.full_name}</p>
-  //       </div>
-  //       <div class="d-flex justify-content-evenly">
-  //         <p class="card-text" id="username"><span class="text-muted">username:</span> ${res.response.body.data.user.username}</p>
-  //         <p class="card-text" id="uid"><span class="text-muted">userID: </span>${res.response.body.data.user.id}</p>
-  //       </div>
-  //       <div class="d-flex justify-content-evenly">
-  //         <p class="card-text" id="follower">${res.response.body.data.user.edge_followed_by.count} <span class="text-muted">follower</span></p>
-  //         <p class="card-text" id="following">${res.response.body.data.user.edge_follow.count} <span class="text-muted">following</span></p>
-  //       </div>
-  //       <div class="d-flex justify-content-evenly">
-  //         <p class="card-text" id="biolink">${res.response.body.data.user.bio_links[0].url}</p>
-  //       </div>
-  //       <div class="d-flex justify-content-evenly">
-  //         <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
-  //       </div>
-  //     </div>
-  //   </div>
-  // </div>`;
+  profileDiv.innerHTML = `<div class="row g-0">
+    <div class="col-md-4">
+      <div class="rounded-circle" style="overflow: hidden; width: max-content;">
+        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 100px; height:100px;">
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title" id="full-name">FullName</h5>
+        <div class="username-uid d-flex justify-content-start">
+          <p class="text-muted" id="username">@${res.response.body.data.user.username}</p>
+          <p class="text-muted ms-3" id="uid">UID: ${res.response.body.data.user.id}</p>
+        </div>
+        <div class="follow-following d-flex justify-content-start">
+          <p><span id="following">${res.response.body.data.user.edge_follow.count} </span><span class="text-muted">Following</span></p>
+          </div>
+          <p><span id="followed-by" class="ms-1">${res.response.body.data.user.edge_followed_by.count} </span><span class="text-muted"s>Followers</span></p>
+        <p class="card-text" id="biolinks"><a href="${res.response.body.data.user.bio_links[0].url}" class=="text-decoration-none">${res.response.body.data.user.bio_links[0].url}</a></p>
+        <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
+      </div>
+    </div>
+  </div>
+</div>`;
   containerDiv.insertBefore(profileDiv, footerDiv);
 }
-
-function errorHandle(){
+function errorHandle() {
   let errorMessage = document.createElement('div');
-  errorMessage.setAttribute('id','error-message');
-  errorMessage.innerHTML =`<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
-   containerDiv.insertBefore(errorMessage,footerDiv);
+  errorMessage.setAttribute('id', 'error-message');
+  errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
+  containerDiv.insertBefore(errorMessage, footerDiv);
 }
-
-// setTimeout(function() {
-// profile();
-// //errorHandle()
-// }, 5000);
 
 
 

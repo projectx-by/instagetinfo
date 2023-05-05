@@ -43,14 +43,12 @@ button #btn-radio {
   width: max-content;
   margin: auto;
 }
-#full-name{
-  text-align: center;
-  font-size: 10vw;
-}
-#error-message{
+
+#error-message {
   margin-top: 50px;
 }
-#error-message h3{
+
+#error-message h3 {
   font-size: 100px;
 }
 
