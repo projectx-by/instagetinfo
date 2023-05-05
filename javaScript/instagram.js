@@ -1,58 +1,84 @@
-let inputForm, searchButtonn, radioButtonDiv, footerDiv, containerDiv;
+let inputForm, searchButton, radioButtonDiv, footerDiv, containerDiv;
 inputForm = document.getElementById('keyword');
-searchButtonn = document.getElementById('searchBtn');
+searchButton = document.getElementById('searchBtn');
 radioButtonDiv = document.getElementById('btn-radio');
 footerDiv = document.getElementById('footer');
 containerDiv = document.getElementById('container');
-inputForm.addEventListener('input', (e) => {
-  console.log(e.target.value);
-})
 
+let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
+let getByID = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info_by_id';
+let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
+
+
+inputForm.addEventListener('input', (e) => {
+  return userInfo.body = `{"username":"${e.target.value}"}`;
+})
+searchButton.addEventListener('click', async () => {
+  let responseAPI = await getInfo(userInfo);
+  console.log(responseAPI);
+  profile(responseAPI);
+})
 inputForm.addEventListener('focusin', () => {
-  searchButtonn.classList.remove('bg-secondary')
-  searchButtonn.classList.add('bg-light');
+  searchButton.classList.remove('bg-secondary')
+  searchButton.classList.add('bg-light');
   radioButtonDiv.classList.add('bg-secondary');
 })
 inputForm.addEventListener('focusout', () => {
-  searchButtonn.classList.add('bg-secondary');
-  searchButtonn.classList.remove('bg-light');
+  searchButton.classList.add('bg-secondary');
+  searchButton.classList.remove('bg-light');
   radioButtonDiv.classList.remove('bg-secondary');
 })
 
-function profile() {
+function profile(res) {
   let profileDiv = document.createElement('div');
   profileDiv.setAttribute('class', 'card')
   profileDiv.classList.add('mb-3');
-  profileDiv.setAttribute('style', 'max-width: 540px;');
+  profileDiv.classList.add('bg-dark');
+  profileDiv.setAttribute('style', 'max-width: 500px; outline:none; border:none;');
   profileDiv.setAttribute('id', 'profileDiv');
-  profileDiv.innerHTML = `<div class="row g-0">
-    <div class="col-md-4">
-      <img src="../asset/example-0.jpg" class="img-fluid rounded-start" alt="..." crossorigin="anonymous">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <div class="d-flex justify-content-evenly">
-          <p class="card-text text-dark" id="username">ini username</p>
-          <p class="card-text text-dark" id="uid">ini userID</p>
-        </div>
-        <div class="d-flex justify-content-evenly">
-          <p class="card-text text-dark" id="follower">following</p>
-          <p class="card-text text-dark" id="following">follower</p>
-        </div>
-        <div class="d-flex justify-content-evenly">
-          <p class="card-text text-dark" id="biolink">ini biolink</p>
-        </div>
-        <div class="d-flex justify-content-evenly">
-          <p class="card-text text-dark" id="biography">ini biography</p>
-        </div>
-      </div>
-    </div>
-  </div>`;
+  profileDiv.innerHTML =
+  // `<div class="row g-0">
+  //   <div class="col-md-4">
+  //   <div class="image-profile rounded-circle bg-danger d-flex justify-content-center">
+  //     <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" alt="profile-picture" crossorigin="anonymous">
+  //   </div>
+  //   </div>
+  //   <div class="col-md-8">
+  //     <div class="card-body bg-dark text-white">
+  //       <div class="d-flex justify-content-center">
+  //       <p class="card-text" id="full-name">${res.response.body.data.user.full_name}</p>
+  //       </div>
+  //       <div class="d-flex justify-content-evenly">
+  //         <p class="card-text" id="username"><span class="text-muted">username:</span> ${res.response.body.data.user.username}</p>
+  //         <p class="card-text" id="uid"><span class="text-muted">userID: </span>${res.response.body.data.user.id}</p>
+  //       </div>
+  //       <div class="d-flex justify-content-evenly">
+  //         <p class="card-text" id="follower">${res.response.body.data.user.edge_followed_by.count} <span class="text-muted">follower</span></p>
+  //         <p class="card-text" id="following">${res.response.body.data.user.edge_follow.count} <span class="text-muted">following</span></p>
+  //       </div>
+  //       <div class="d-flex justify-content-evenly">
+  //         <p class="card-text" id="biolink">${res.response.body.data.user.bio_links[0].url}</p>
+  //       </div>
+  //       <div class="d-flex justify-content-evenly">
+  //         <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
+  //       </div>
+  //     </div>
+  //   </div>
+  // </div>`;
   containerDiv.insertBefore(profileDiv, footerDiv);
 }
 
-profile();
+function errorHandle(){
+  let errorMessage = document.createElement('div');
+  errorMessage.setAttribute('id','error-message');
+  errorMessage.innerHTML =`<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
+   containerDiv.insertBefore(errorMessage,footerDiv);
+}
 
+// setTimeout(function() {
+// profile();
+// //errorHandle()
+// }, 5000);
 
 
 
@@ -98,7 +124,6 @@ profile();
 // radioBtnClose = document.getElementById('btn-radio-close');
 // let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
 // let getByID = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info_by_id';
-// let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 // let elementFooter = document.getElementById('footer');
 // let elementContainer = document.getElementById('container');
 // let elementResult = `<div class="card mx-5 bg-dark" style="max-width: 90vw;margin-top: 15vw;border:none;">
@@ -398,19 +423,19 @@ profile();
 //   }, ms);
 // }
 
-// userInfo = {
-//   method: 'POST',
-//   mode: 'cors',
-//   referrerPolicy: 'no-referrer-when-downgrade',
-//   credentials: 'same-origin',
-//   headers: {
-//     'content-type': 'application/json',
-//     'X-RapidAPI-Key': API_KEY,
-//     'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
-//   }
-// };
-// function getInfo(getBy, user) {
-//   return fetch(getBy, user)
-//     .then(response => response.json())
-//     .then(response => response);
-// }
+userInfo = {
+  method: 'POST',
+  mode: 'cors',
+  referrerPolicy: 'no-referrer-when-downgrade',
+  credentials: 'same-origin',
+  headers: {
+    'content-type': 'application/json',
+    'X-RapidAPI-Key': API_KEY,
+    'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
+  }
+};
+function getInfo(user) {
+  return fetch(getByUsername, user)
+    .then(response => response.json())
+    .then(response => response);
+}
