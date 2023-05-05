@@ -44,32 +44,39 @@ function profile(res) {
       </div>
     </div>
     <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title" id="full-name">FullName</h5>
+      <div class="card-body" id="card-body">
+        <h5 class="card-title" id="full-name">${res.response.body.data.user.full_name}</h5>
         <div class="username-uid d-flex justify-content-start">
           <p class="text-muted" id="username">@${res.response.body.data.user.username}</p>
           <p class="text-muted ms-3" id="uid">UID: ${res.response.body.data.user.id}</p>
         </div>
         <div class="follow-following d-flex justify-content-start">
           <p><span id="following">${res.response.body.data.user.edge_follow.count} </span><span class="text-muted">Following</span></p>
-          </div>
-          <p><span id="followed-by" class="ms-1">${res.response.body.data.user.edge_followed_by.count} </span><span class="text-muted"s>Followers</span></p>
-        <p class="card-text" id="biolinks"><a href="${res.response.body.data.user.bio_links[0].url}" class=="text-decoration-none">${res.response.body.data.user.bio_links[0].url}</a></p>
+          <p><span id="followed-by" class="ms-3">${res.response.body.data.user.edge_followed_by.count} </span><span class="text-muted"s>Followers</span></p>
+        </div>
         <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
       </div>
     </div>
   </div>
 </div>`;
   containerDiv.insertBefore(profileDiv, footerDiv);
+  if (res.response.body.data.user.bio_links.length != 0) {
+    for (i = 0; i < res.response.body.data.user.bio_links.length; i++) {
+      let pbioLinks = document.createElement('p');
+      pbioLinks.setAttribute('class', 'card-text');
+      pbioLinks.innerHTML = `<a href="${res.response.body.data.user.bio_links[0].url}" class="text-white">${res.response.body.data.user.bio_links[0].url}</a>`;
+      let pbiography = document.getElementById('biography');
+      document.getElementById('card-body').insertBefore(pbioLinks, pbiography);
+    }
+  }
 }
+
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
   errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
   containerDiv.insertBefore(errorMessage, footerDiv);
 }
-
-
 
 
 
