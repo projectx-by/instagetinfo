@@ -29,47 +29,85 @@ inputForm.addEventListener('focusout', () => {
   radioButtonDiv.classList.remove('bg-secondary');
 })
 
-function profile(res) {
-  let profileDiv = document.createElement('div');
-  profileDiv.setAttribute('class', 'card')
-  profileDiv.classList.add('mb-3');
-  profileDiv.classList.add('bg-dark');
-  profileDiv.classList.add('mx-3');
-  profileDiv.setAttribute('style', 'max-width: 500px; outline:none; border:none;');
-  profileDiv.setAttribute('id', 'profileDiv');
-  profileDiv.innerHTML = `<div class="row g-0">
+// function profile(res) {
+//   let profileDiv = document.createElement('div');
+//   profileDiv.setAttribute('class', 'card')
+//   profileDiv.classList.add('mb-3');
+//   profileDiv.classList.add('bg-dark');
+//   profileDiv.classList.add('mx-3');
+//   profileDiv.setAttribute('style', 'max-width: 500px; outline:none; border:none;');
+//   profileDiv.setAttribute('id', 'profileDiv');
+//   profileDiv.innerHTML = `<div class="row g-0">
+//     <div class="col-md-4">
+//       <div class="rounded-circle" style="overflow: hidden; width: max-content;">
+//         <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 100px; height:100px;">
+//       </div>
+//     </div>
+//     <div class="col-md-8">
+//       <div class="card-body" id="card-body">
+//         <h5 class="card-title" id="full-name">${res.response.body.data.user.full_name}</h5>
+//         <div class="username-uid d-flex justify-content-start">
+//           <p class="text-muted" id="username">@${res.response.body.data.user.username}</p>
+//           <p class="text-muted ms-3" id="uid">UID: ${res.response.body.data.user.id}</p>
+//         </div>
+//         <div class="follow-following d-flex justify-content-start">
+//           <p><span id="following">${res.response.body.data.user.edge_follow.count} </span><span class="text-muted">Following</span></p>
+//           <p><span id="followed-by" class="ms-3">${res.response.body.data.user.edge_followed_by.count} </span><span class="text-muted"s>Followers</span></p>
+//         </div>
+//         <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
+//       </div>
+//     </div>
+//   </div>
+// </div>`;
+//   containerDiv.insertBefore(profileDiv, footerDiv);
+//   if (res.response.body.data.user.bio_links.length != 0) {
+//     for (i = 0; i < res.response.body.data.user.bio_links.length; i++) {
+//       let pbioLinks = document.createElement('p');
+//       pbioLinks.setAttribute('class', 'card-text');
+//       pbioLinks.innerHTML = `<a href="${res.response.body.data.user.bio_links[0].url}" class="text-white">${res.response.body.data.user.bio_links[0].url}</a>`;
+//       let pbiography = document.getElementById('biography');
+//       document.getElementById('card-body').insertBefore(pbioLinks, pbiography);
+//     }
+//   }
+// }
+
+function userPost(res) {
+  let headerPost = document.createElement('h5');
+  headerPost.setAttribute('class', 'text-white');
+  headerPost.setAttribute('class', 'ms-3');
+  headerPost.setAttribute('id', 'header-post');
+  headerPost.textContent = 'Post From @username';
+  containerDiv.insertBefore(headerPost, footerDiv);
+
+
+  for (i = 0; i < 3; i++) {
+
+    let bodyPost = document.createElement('div');
+    bodyPost.setAttribute('class', 'card');
+    bodyPost.setAttribute('class', 'bg-dark');
+    bodyPost.setAttribute('class', 'mx-3');
+    bodyPost.setAttribute('id', 'body-post');
+    bodyPost.setAttribute('style', 'max-width: 500px; outline: none; border: none;');
+    bodyPost.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
-      <div class="rounded-circle" style="overflow: hidden; width: max-content;">
-        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 100px; height:100px;">
-      </div>
+      <img src="../asset/favicon.ico" class="img-fluid" alt="post-images" crossorigin="anonymous" width="100px" height="100px">
     </div>
     <div class="col-md-8">
-      <div class="card-body" id="card-body">
-        <h5 class="card-title" id="full-name">${res.response.body.data.user.full_name}</h5>
-        <div class="username-uid d-flex justify-content-start">
-          <p class="text-muted" id="username">@${res.response.body.data.user.username}</p>
-          <p class="text-muted ms-3" id="uid">UID: ${res.response.body.data.user.id}</p>
+      <div class="card-body text-white">
+        <div class="d-flex justify-content-start">
+          <h5 class="card-title">Post Title</h5>
+          <span class="text-muted ms-3">Type Post</span>
         </div>
-        <div class="follow-following d-flex justify-content-start">
-          <p><span id="following">${res.response.body.data.user.edge_follow.count} </span><span class="text-muted">Following</span></p>
-          <p><span id="followed-by" class="ms-3">${res.response.body.data.user.edge_followed_by.count} </span><span class="text-muted"s>Followers</span></p>
-        </div>
-        <p class="card-text" id="biography">${res.response.body.data.user.biography}</p>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <p class="card-text"><button class="btn btn-light">Details</button></p>
       </div>
     </div>
-  </div>
-</div>`;
-  containerDiv.insertBefore(profileDiv, footerDiv);
-  if (res.response.body.data.user.bio_links.length != 0) {
-    for (i = 0; i < res.response.body.data.user.bio_links.length; i++) {
-      let pbioLinks = document.createElement('p');
-      pbioLinks.setAttribute('class', 'card-text');
-      pbioLinks.innerHTML = `<a href="${res.response.body.data.user.bio_links[0].url}" class="text-white">${res.response.body.data.user.bio_links[0].url}</a>`;
-      let pbiography = document.getElementById('biography');
-      document.getElementById('card-body').insertBefore(pbioLinks, pbiography);
-    }
+  </div>`;
+    containerDiv.insertBefore(bodyPost, footerDiv);
   }
 }
+
+userPost();
 
 function errorHandle() {
   let errorMessage = document.createElement('div');
@@ -77,7 +115,6 @@ function errorHandle() {
   errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
   containerDiv.insertBefore(errorMessage, footerDiv);
 }
-
 
 
 

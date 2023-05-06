@@ -34,7 +34,8 @@ button #btn-radio {
   width: 10vw;
 }
 
-#profileDiv {
+#profileDiv,
+#header-post {
   margin-top: 15vw;
 }
 
@@ -42,6 +43,10 @@ button #btn-radio {
   overflow: hidden;
   width: max-content;
   margin: auto;
+}
+
+#body-post {
+  margin-top: 10vw;
 }
 
 #error-message {
