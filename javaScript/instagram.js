@@ -1,8 +1,8 @@
-let inputForm, searchButton, radioButtonDiv, footerDiv, containerDiv;
+let inputForm, searchButton, radioButtonDiv, footerResult, containerResult;
 inputForm = document.getElementById('keyword');
 searchButton = document.getElementById('searchBtn');
-footerDiv = document.getElementById('footer');
-containerDiv = document.getElementById('container');
+footerResult = document.getElementById('footer-result');
+containerResult = document.getElementById('container-result');
 radioButtonDiv = document.getElementById('btn-radio');
 
 let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
@@ -45,6 +45,12 @@ async function executed(){
     convertIdToUsername(tempResponApi);
     responseAPI = await getInfo(getByUsername,userInfo)
   }
+  if(containerResult.hasChildNodes()){
+    containerResult.innerHTML = '';
+    footerResult = document.createElement('div');
+    footerResult.setAttribute('id','footer-result');
+    containerResult.appendChild(footerResult);
+  }
   console.log(responseAPI);
   profile(responseAPI);
   userPost(responseAPI);
@@ -82,7 +88,7 @@ function profile(res) {
     </div>
   </div>
 </div>`;
-  containerDiv.insertBefore(profileDiv, footerDiv);
+  containerResult.insertBefore(profileDiv, footerResult);
   if (res.response.body.data.user.bio_links.length != 0) {
     for (i = 0; i < res.response.body.data.user.bio_links.length; i++) {
       let pbioLinks = document.createElement('p');
@@ -100,7 +106,7 @@ function userPost(res) {
   headerPost.setAttribute('class', 'ms-3');
   headerPost.setAttribute('id', 'header-post');
   headerPost.textContent = `Post From @${res.response.body.data.user.username}`;
-  containerDiv.insertBefore(headerPost, footerDiv);
+  containerResult.insertBefore(headerPost, footerResult);
   let listPost = res.response.body.data.user.edge_owner_to_timeline_media.edges;
   if (listPost.length == 0 || res.response.body.data.user.is_private == true) {
     let bodyPost = document.createElement('div');
@@ -119,7 +125,7 @@ function userPost(res) {
       </div>
     </div>
   </div>`
-    containerDiv.insertBefore(bodyPost, footerDiv);
+    containerResult.insertBefore(bodyPost, footerResult);
     console.log('no post here');
   } else {
     for (i = 0; i < listPost.length; i++) {
@@ -144,7 +150,7 @@ function userPost(res) {
       </div>
     </div>
   </div>`;
-      containerDiv.insertBefore(bodyPost, footerDiv);
+      containerResult.insertBefore(bodyPost, footerResult);
       let caption = document.getElementById(`caption${i}`);
       caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
       listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
@@ -167,7 +173,7 @@ function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
   errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
-  containerDiv.insertBefore(errorMessage, footerDiv);
+  containerResult.insertBefore(errorMessage, footerResult);
 }
 
 let btnRadioClose = document.getElementById('btn-radio-close');
