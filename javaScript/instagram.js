@@ -40,12 +40,13 @@ function profile(res) {
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
       <div class="rounded-circle" style="overflow: hidden; width: max-content;">
-        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 100px; height:100px;">
+        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;">
       </div>
     </div>
     <div class="col-md-8">
       <div class="card-body" id="card-body">
         <h5 class="card-title" id="full-name">${res.response.body.data.user.full_name}</h5>
+        <span class="card-title text-muted">is_private : ${res.response.body.data.user.is_private}</span>
         <div class="username-uid d-flex justify-content-start">
           <p class="text-muted" id="username">@${res.response.body.data.user.username}</p>
           <p class="text-muted ms-3" id="uid">UID: ${res.response.body.data.user.id}</p>
@@ -76,50 +77,77 @@ function userPost(res) {
   headerPost.setAttribute('class', 'text-white');
   headerPost.setAttribute('class', 'ms-3');
   headerPost.setAttribute('id', 'header-post');
-  //headerPost.textContent = `Post From @${res.response.body.data.user.username}`;
+  headerPost.textContent = `Post From @${res.response.body.data.user.username}`;
   containerDiv.insertBefore(headerPost, footerDiv);
-  //let listPost = res.response.body.data.user.edge_owner_to_timeline_media.edges;
-  for (i = 0; i < 10 ; i++) {
+  let listPost = res.response.body.data.user.edge_owner_to_timeline_media.edges;
+  if (listPost.length == 0 || res.response.body.data.user.is_private == true) {
     let bodyPost = document.createElement('div');
     bodyPost.setAttribute('class', 'card');
-    addClass(bodyPost,['mx-3','bg-secondary','rounded']);
+    bodyPost.classList.add('mx-3');
+    bodyPost.classList.add('bg-dark');
+    bodyPost.classList.add('rounded');
     bodyPost.setAttribute('id', 'body-post');
     bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none;');
     bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
     <div class="col-md-4">
-      <img src="../asset/example-0.jpg"class="img-fluid" alt="post-images" crossorigin="anonymous" width="640px" height="640px">
     </div>
     <div class="col-md-8">
-      <div class="card-body text-white">
-          <h5 class="card-title">PHOTOSKSKENSNNDSNBSBSBB</h5>
-          <span class="text-muted">nsjsjwwnjshsjsjeheeheh</span>
-        <p class="card-text">jejjejejejejneegejenebenebebebebbehe</p>
+      <div class="card-body text-white" id="card-body">
+        <p class="card-text text-center">No Post Here</p>
+      </div>
+    </div>
+  </div>`
+    containerDiv.insertBefore(bodyPost, footerDiv);
+    console.log('no post here');
+  } else {
+    for (i = 0; i < listPost.length; i++) {
+      let bodyPost = document.createElement('div');
+      bodyPost.setAttribute('class', 'card');
+      bodyPost.classList.add('mx-3');
+      bodyPost.classList.add('bg-dark');
+      bodyPost.classList.add('rounded');
+      bodyPost.setAttribute('id', 'body-post');
+      bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none;');
+
+      bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
+    <div class="col-md-4">
+      <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body text-white" id="card-body">
+        <h5 class="card-title" id="caption${i}">${listPost[i].node.accessibility_caption}</h5>
+        <span class="text-muted">${listPost[i].node.__typename}</span>
+        <p class="card-text" id="node-text${i}"></p>
         <p class="card-text d-flex justify-content-end"><button class="btn btn-light">Details</button></p>
       </div>
     </div>
   </div>`;
-    containerDiv.insertBefore(bodyPost, footerDiv);
+      containerDiv.insertBefore(bodyPost, footerDiv);
+      let caption = document.getElementById(`caption${i}`);
+      caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
+      listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
+    }
+
+
   }
-  
-    //   <!--
-    //   <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
-    // -->
-    //           <h5 class="card-title">${listPost[i].node.accessibility_caption}</h5>
-    //       <span class="text-muted">${listPost[i].node.__typename}</span>
-    //     <p class="card-text">${listPost[i].node.edge_media_to_caption.edges[0].node.text}</p>
+
+  //   <!--
+  // 
+  // <img src="../asset/example-0.jpg" class="img-fluid rounded" alt="post-images" crossorigin="anonymous" width="640px" height="640px"></img>
+  //   <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
+  // -->
+  //           <h5 class="card-title">${listPost[i].node.accessibility_caption}</h5>
+  //       <span class="text-muted">${listPost[i].node.__typename}</span>
+  //     <p class="card-text">${listPost[i].node.edge_media_to_caption.edges[0].node.text}</p>
 }
-function addClass(element,value){
-  for(i=0;i<value.length;i++){
-    element.classList.add(value[i]);
-  }
-}
-userPost();
+
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
   errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
   containerDiv.insertBefore(errorMessage, footerDiv);
 }
+
 
 
 
