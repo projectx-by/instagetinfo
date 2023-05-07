@@ -1,7 +1,6 @@
 let inputForm, searchButton, radioButtonDiv, footerDiv, containerDiv;
 inputForm = document.getElementById('keyword');
 searchButton = document.getElementById('searchBtn');
-radioButtonDiv = document.getElementById('btn-radio');
 footerDiv = document.getElementById('footer');
 containerDiv = document.getElementById('container');
 
@@ -156,14 +155,23 @@ function errorHandle() {
   containerDiv.insertBefore(errorMessage, footerDiv);
 }
 
+let btnRadioClose = document.getElementById('btn-radio-close');
+btnRadioClose.addEventListener('click',() => {
+if(document.getElementById('input-username').checked == true){
+    document.getElementById('btn-checked').textContent = 'Username';
+    document.getElementById('keyword').setAttribute('placeholder','ex: 0xwildcard');
+  }else{
+    document.getElementById('btn-checked').textContent = 'User ID';
+    document.getElementById('keyword').setAttribute('placeholder','ex: 7430039768');
+  }
+})
 
 
 
 
 
 
-
-userInfo = {
+let userInfo = {
   method: 'POST',
   mode: 'cors',
   referrerPolicy: 'no-referrer-when-downgrade',
