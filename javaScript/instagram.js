@@ -3,6 +3,7 @@ inputForm = document.getElementById('keyword');
 searchButton = document.getElementById('searchBtn');
 footerDiv = document.getElementById('footer');
 containerDiv = document.getElementById('container');
+radioButtonDiv = document.getElementById('btn-radio');
 
 let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
 let getByID = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info_by_id';
@@ -10,7 +11,11 @@ let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 
 
 inputForm.addEventListener('input', (e) => {
+  if(document.getElementById('input-username').checked == true){
   return userInfo.body = `{"username":"${e.target.value}"}`;
+  }else{
+  return userInfo.body = `{"id":"${e.target.value}"}`;
+  }
 })
 inputForm.addEventListener('keypress', (target) => {
   if (target.key === 'Enter') {
@@ -32,10 +37,20 @@ inputForm.addEventListener('focusout', () => {
 })
 
 async function executed(){
-  let responseAPI = await getInfo(userInfo);
+  let responseAPI;
+  if(document.getElementById('input-username').checked == true){
+    responseAPI = await getInfo(getByUsername,userInfo)
+  }else{
+    let tempResponApi = await getInfo(getByID,userInfo);
+    convertIdToUsername(tempResponApi);
+    responseAPI = await getInfo(getByUsername,userInfo)
+  }
   console.log(responseAPI);
   profile(responseAPI);
   userPost(responseAPI);
+}
+function convertIdToUsername(res){
+  return userInfo.body = `{"username":"${res.response.body.user.username}"}`;
 }
 function profile(res) {
   let profileDiv = document.createElement('div');
@@ -182,8 +197,8 @@ let userInfo = {
     'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
   }
 };
-function getInfo(user) {
-  return fetch(getByUsername, user)
+function getInfo(url,user) {
+  return fetch(url, user)
     .then(response => response.json())
     .then(response => response);
 }
