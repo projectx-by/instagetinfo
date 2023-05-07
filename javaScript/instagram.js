@@ -13,6 +13,11 @@ let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 inputForm.addEventListener('input', (e) => {
   return userInfo.body = `{"username":"${e.target.value}"}`;
 })
+inputForm.addEventListener('keypress', (target) => {
+  if (target.key === 'Enter') {
+    searchButton.click();
+  }
+})
 searchButton.addEventListener('click', async () => {
   let responseAPI = await getInfo(userInfo);
   console.log(responseAPI);
