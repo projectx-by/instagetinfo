@@ -44,7 +44,7 @@ function profile(res) {
   profileDiv.setAttribute('id', 'profileDiv');
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
-      <div class="rounded-circle" style="overflow: hidden; width: max-content;">
+      <div class="rounded-circle border border-dark" style="overflow: hidden; width: max-content;">
         <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;">
       </div>
     </div>
