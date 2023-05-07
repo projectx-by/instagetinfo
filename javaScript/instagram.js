@@ -18,11 +18,8 @@ inputForm.addEventListener('keypress', (target) => {
     searchButton.click();
   }
 })
-searchButton.addEventListener('click', async () => {
-  let responseAPI = await getInfo(userInfo);
-  console.log(responseAPI);
-  profile(responseAPI);
-  userPost(responseAPI);
+searchButton.addEventListener('click', () => {
+  executed();
 })
 inputForm.addEventListener('focusin', () => {
   searchButton.classList.remove('bg-secondary')
@@ -35,6 +32,12 @@ inputForm.addEventListener('focusout', () => {
   radioButtonDiv.classList.remove('bg-secondary');
 })
 
+async function executed(){
+  let responseAPI = await getInfo(userInfo);
+  console.log(responseAPI);
+  profile(responseAPI);
+  userPost(responseAPI);
+}
 function profile(res) {
   let profileDiv = document.createElement('div');
   profileDiv.setAttribute('class', 'card')
@@ -160,7 +163,22 @@ function errorHandle() {
 
 
 
-
+userInfo = {
+  method: 'POST',
+  mode: 'cors',
+  referrerPolicy: 'no-referrer-when-downgrade',
+  credentials: 'same-origin',
+  headers: {
+    'content-type': 'application/json',
+    'X-RapidAPI-Key': API_KEY,
+    'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
+  }
+};
+function getInfo(user) {
+  return fetch(getByUsername, user)
+    .then(response => response.json())
+    .then(response => response);
+}
 
 
 
@@ -491,20 +509,3 @@ function errorHandle() {
 //     if (i == counter) { clearInterval(interID); };
 //   }, ms);
 // }
-
-userInfo = {
-  method: 'POST',
-  mode: 'cors',
-  referrerPolicy: 'no-referrer-when-downgrade',
-  credentials: 'same-origin',
-  headers: {
-    'content-type': 'application/json',
-    'X-RapidAPI-Key': API_KEY,
-    'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
-  }
-};
-function getInfo(user) {
-  return fetch(getByUsername, user)
-    .then(response => response.json())
-    .then(response => response);
-}
