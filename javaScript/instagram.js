@@ -168,16 +168,71 @@ function userPost(res) {
   }
 }
 
-function modalPopup(event) {
-  let elementTarget = event.target.tagName;
-  if (elementTarget == 'IMG') {
-    let getImageSrc = event.target.attributes.src.value;
+function popUp(event) {
+  console.log(event);
+  console.log(event.target);
+  let elementTarget = event.target;
+  let getImageSrc;
+  if (elementTarget.tagName == 'IMG' && elementTarget.offsetParent.id == 'profileDiv') {
+    event.target.id = 'main-img';
+    getImageSrc = event.target.attributes.src.value;
     console.log(event.target.attributes);
     console.log(getImageSrc);
-  } else {
-    console.log('other')
-  }
+    
+    let popupModal = document.createElement('div');
+  popupModal.setAttribute('class','modal');
+  popupModal.classList.add('fade');
+  popupModal.setAttribute('id','exampleModal');
+  popupModal.setAttribute('tabindex','-1');
+  popupModal.setAttribute('aria-labelledby','exampleModalLabel');
+  popupModal.setAttribute('aria-hidden','true');
+  popupModal.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body" style="padding: 0px;">
+<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" alt="..." crossorigin="anonymous" id="img-popup" src="${getImageSrc}">
+      </div>
+    </div>
+  </div>
+  <!--
+  <button class="carousel-control-prev bg-dark rounded-end button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev" style="height: 50px; width: 35px; margin-top: 225px;" id="prev">
+    <span class="carousel-control-prev-icon" style="text-shadow: 2px 2px 2px black;"></span>
+  </button>
+  <button class="carousel-control-next bg-dark rounded-start button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next" style="height: 50px; width: 35px; margin-top: 225px;">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+  -->
+</div>
+      </div>
+    </div>
+  </div>
+</div>`;
+if(containerResult.querySelector('#exampleModal') == null){
+containerResult.insertBefore(popupModal,footerResult);
 }
+let setButtonPopup = document.getElementById('main-img');
+setButtonPopup.setAttribute('data-bs-target','#exampleModal');
+setButtonPopup.setAttribute('data-bs-toggle','modal');
+  } 
+}
+
+// function test(){
+//   let cards = document.createElement('div');
+//   cards.setAttribute('class','card');
+//   cards.setAttribute('id','card-img');
+//   cards.setAttribute('style','width: 18rem;');
+//   cards.innerHTML=`<img src="../asset/example-0.jpg" class="card-img-top" alt="..." crossorigin="anonymous">
+//   <div class="card-body">
+//     <h5 class="card-title">Card title</h5>
+//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+//     <a href="#" class="btn btn-primary">Go somewhere</a>
+//   </div>
+// </div>`;
+// containerResult.insertBefore(cards,footerResult);
+// }
+// test();
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
