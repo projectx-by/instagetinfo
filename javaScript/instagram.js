@@ -11,10 +11,10 @@ let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 
 
 inputForm.addEventListener('input', (e) => {
-  if(document.getElementById('input-username').checked == true){
-  return userInfo.body = `{"username":"${e.target.value}"}`;
-  }else{
-  return userInfo.body = `{"id":"${e.target.value}"}`;
+  if (document.getElementById('input-username').checked == true) {
+    return userInfo.body = `{"username":"${e.target.value}"}`;
+  } else {
+    return userInfo.body = `{"id":"${e.target.value}"}`;
   }
 })
 inputForm.addEventListener('keypress', (target) => {
@@ -36,26 +36,30 @@ inputForm.addEventListener('focusout', () => {
   radioButtonDiv.classList.remove('bg-secondary');
 })
 
-async function executed(){
-  let responseAPI;
-  if(document.getElementById('input-username').checked == true){
-    responseAPI = await getInfo(getByUsername,userInfo)
-  }else{
-    let tempResponApi = await getInfo(getByID,userInfo);
-    convertIdToUsername(tempResponApi);
-    responseAPI = await getInfo(getByUsername,userInfo)
-  }
-  if(containerResult.hasChildNodes()){
+async function executed() {
+  if (containerResult.hasChildNodes()) {
     containerResult.innerHTML = '';
     footerResult = document.createElement('div');
-    footerResult.setAttribute('id','footer-result');
+    footerResult.setAttribute('id', 'footer-result');
     containerResult.appendChild(footerResult);
   }
+  loadingEffect();
+  let responseAPI;
+  if (document.getElementById('input-username').checked == true) {
+    responseAPI = await getInfo(getByUsername, userInfo)
+  } else {
+    let tempResponApi = await getInfo(getByID, userInfo);
+    convertIdToUsername(tempResponApi);
+    responseAPI = await getInfo(getByUsername, userInfo)
+  }
   console.log(responseAPI);
-  profile(responseAPI);
-  userPost(responseAPI);
+  setTimeout(function () {
+    document.getElementById('loader').remove();
+    profile(responseAPI);
+    userPost(responseAPI);
+  }, 5000);
 }
-function convertIdToUsername(res){
+function convertIdToUsername(res) {
   return userInfo.body = `{"username":"${res.response.body.user.username}"}`;
 }
 function profile(res) {
@@ -158,15 +162,6 @@ function userPost(res) {
 
 
   }
-
-  //   <!--
-  // 
-  // <img src="../asset/example-0.jpg" class="img-fluid rounded" alt="post-images" crossorigin="anonymous" width="640px" height="640px"></img>
-  //   <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
-  // -->
-  //           <h5 class="card-title">${listPost[i].node.accessibility_caption}</h5>
-  //       <span class="text-muted">${listPost[i].node.__typename}</span>
-  //     <p class="card-text">${listPost[i].node.edge_media_to_caption.edges[0].node.text}</p>
 }
 
 function errorHandle() {
@@ -177,18 +172,27 @@ function errorHandle() {
 }
 
 let btnRadioClose = document.getElementById('btn-radio-close');
-btnRadioClose.addEventListener('click',() => {
-if(document.getElementById('input-username').checked == true){
+btnRadioClose.addEventListener('click', () => {
+  if (document.getElementById('input-username').checked == true) {
     document.getElementById('btn-checked').textContent = 'Username';
-    document.getElementById('keyword').setAttribute('placeholder','ex: 0xwildcard');
-  }else{
+    document.getElementById('keyword').setAttribute('placeholder', 'ex: 0xwildcard');
+  } else {
     document.getElementById('btn-checked').textContent = 'User ID';
-    document.getElementById('keyword').setAttribute('placeholder','ex: 7430039768');
+    document.getElementById('keyword').setAttribute('placeholder', 'ex: 7430039768');
   }
 })
 
-
-
+function loadingEffect() {
+  let loadingEvent = document.createElement("div");
+  loadingEvent.setAttribute('id', 'loader');
+  loadingEvent.setAttribute('style', 'width:100%; height:100%; position:fixed; z-index:100;');
+  loadingEvent.innerHTML = `<div class="loader">
+  <div class="inner one"></div>
+  <div class="inner two"></div>
+  <div class="inner three"></div>
+</div>`;
+  containerResult.insertBefore(loadingEvent, footerResult);
+}
 
 
 
@@ -203,7 +207,7 @@ let userInfo = {
     'X-RapidAPI-Host': 'rocketapi-for-instagram.p.rapidapi.com'
   }
 };
-function getInfo(url,user) {
+function getInfo(url, user) {
   return fetch(url, user)
     .then(response => response.json())
     .then(response => response);
