@@ -55,8 +55,12 @@ async function executed() {
   console.log(responseAPI);
   setTimeout(function () {
     document.getElementById('loader').remove();
-    profile(responseAPI);
-    userPost(responseAPI);
+    if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
+      errorHandle();
+    } else {
+      profile(responseAPI);
+      userPost(responseAPI);
+    }
   }, 5000);
 }
 function convertIdToUsername(res) {
