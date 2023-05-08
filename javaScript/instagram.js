@@ -168,6 +168,16 @@ function userPost(res) {
   }
 }
 
+function modalPopup(event) {
+  let elementTarget = event.target.tagName;
+  if (elementTarget == 'IMG') {
+    let getImageSrc = event.target.attributes.src.value;
+    console.log(event.target.attributes);
+    console.log(getImageSrc);
+  } else {
+    console.log('other')
+  }
+}
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
