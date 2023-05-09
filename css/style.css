@@ -15,7 +15,9 @@
 /* :not(#modalProfile) {
   filter: blur(3px);
 } */
-
+.modal.fade.zoom:not(.show) .modal-dialog {
+    transform: scale(0.5);
+}
 input[type="text"] {
   width: 30vw;
 }

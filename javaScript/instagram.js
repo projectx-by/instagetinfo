@@ -171,6 +171,7 @@ function modalProfile(res) {
   let popupModal = document.createElement('div');
   popupModal.setAttribute('class', 'modal');
   popupModal.classList.add('fade');
+  popupModal.classList.add('zoom');
   popupModal.setAttribute('id', 'modalProfile');
   popupModal.setAttribute('tabindex', '-1');
   popupModal.setAttribute('aria-labelledby', 'modalProfileLabel');
@@ -200,7 +201,7 @@ function test() {
   cards.setAttribute('class', 'card');
   cards.setAttribute('id', 'card-img');
   cards.setAttribute('style', 'width: 18rem;');
-  cards.innerHTML = `<img src="../asset/example-0.jpg" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+  cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
   <div class="card-body">
     <h5 class="card-title">Card title</h5>
     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
