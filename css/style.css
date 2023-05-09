@@ -1,3 +1,21 @@
+/* @import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css");
+
+#modalProfile .fade-scale {
+  transform: scale(0);
+  opacity: 0;
+  -webkit-transition: all .25s linear;
+  -o-transition: all .25s linear;
+  transition: all .25s linear;
+}
+
+#modalFrofile .fade-scale.in {
+  opacity: 1;
+  transform: scale(1);
+} */
+/* :not(#modalProfile) {
+  filter: blur(3px);
+} */
+
 input[type="text"] {
   width: 30vw;
 }
