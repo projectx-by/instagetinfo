@@ -196,29 +196,33 @@ function modalProfile(res) {
   let setButtonPopup = document.getElementById('main-img');
   setButtonPopup.setAttribute('data-bs-target', '#modalProfile');
   setButtonPopup.setAttribute('data-bs-toggle', 'modal');
-setButtonPopup.addEventListener('click',()=>{
+  setButtonPopup.addEventListener('click', () => {
     document.body.classList.add('all-blur');
   })
 }
-
-// function test() {
-//   let cards = document.createElement('div');
-//   cards.setAttribute('class', 'card');
-//   cards.setAttribute('id', 'card-img');
-//   cards.setAttribute('style', 'width: 18rem;');
-//   cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-//   <div class="card-body">
-//     <h5 class="card-title">Card title</h5>
-//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-//     <a href="#" class="btn btn-primary">Go somewhere</a>
-//   </div>
-// </div>`;
-//   containerResult.insertBefore(cards, footerResult);
-//   let imgSrc = document.getElementById('main-img').getAttribute('src');
-//   console.log(imgSrc);
-//   modalProfile(imgSrc)
-// }
-// test();
+function bodyClick(event) {
+  if (event.target.id == 'modalProfile') {
+    document.body.classList.remove('all-blur');
+  }
+}
+function test() {
+  let cards = document.createElement('div');
+  cards.setAttribute('class', 'card');
+  cards.setAttribute('id', 'card-img');
+  cards.setAttribute('style', 'width: 18rem;');
+  cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>`;
+  containerResult.insertBefore(cards, footerResult);
+  let imgSrc = document.getElementById('main-img').getAttribute('src');
+  console.log(imgSrc);
+  modalProfile(imgSrc)
+}
+test();
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
