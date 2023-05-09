@@ -76,7 +76,7 @@ function profile(res) {
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
       <div class="rounded-circle border border-dark" style="overflow: hidden; width: max-content;">
-        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;">
+        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;" id="main-img">
       </div>
     </div>
     <div class="col-md-8">
@@ -106,6 +106,8 @@ function profile(res) {
       document.getElementById('card-body').insertBefore(pbioLinks, pbiography);
     }
   }
+  let getImgSrc = document.getElementById('main-img').getAttribute('src');
+  modalProfile(getImgSrc);
 }
 
 function userPost(res) {
@@ -179,8 +181,8 @@ function modalProfile(res) {
       <div class="modal-content">
         <div class="modal-body" style="padding: 0px;">
   <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
+    <div class="carousel-inner"> 
+      <div class="carousel-item active rounded-circle border border-dark" style="overflow:hidden; opacity: 1;" id="img-popup">
         <img class="d-block w-100" alt="profile-picture" crossorigin="anonymous" id="img-popup" src="${res}">
         </div>
       </div>
@@ -194,26 +196,29 @@ function modalProfile(res) {
   let setButtonPopup = document.getElementById('main-img');
   setButtonPopup.setAttribute('data-bs-target', '#modalProfile');
   setButtonPopup.setAttribute('data-bs-toggle', 'modal');
+setButtonPopup.addEventListener('click',()=>{
+    document.body.classList.add('all-blur');
+  })
 }
 
-function test() {
-  let cards = document.createElement('div');
-  cards.setAttribute('class', 'card');
-  cards.setAttribute('id', 'card-img');
-  cards.setAttribute('style', 'width: 18rem;');
-  cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>`;
-  containerResult.insertBefore(cards, footerResult);
-  let imgSrc = document.getElementById('main-img').getAttribute('src');
-  console.log(imgSrc);
-  modalProfile(imgSrc)
-}
-test();
+// function test() {
+//   let cards = document.createElement('div');
+//   cards.setAttribute('class', 'card');
+//   cards.setAttribute('id', 'card-img');
+//   cards.setAttribute('style', 'width: 18rem;');
+//   cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+//   <div class="card-body">
+//     <h5 class="card-title">Card title</h5>
+//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+//     <a href="#" class="btn btn-primary">Go somewhere</a>
+//   </div>
+// </div>`;
+//   containerResult.insertBefore(cards, footerResult);
+//   let imgSrc = document.getElementById('main-img').getAttribute('src');
+//   console.log(imgSrc);
+//   modalProfile(imgSrc)
+// }
+// test();
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
