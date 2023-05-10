@@ -151,11 +151,10 @@ function userPost(res) {
       <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
     </div>
     <div class="col-md-8">
-      <div class="card-body text-white" id="card-body">
+      <div class="card-body text-white" id="card-body-${i}">
         <h5 class="card-title" id="caption${i}">${listPost[i].node.accessibility_caption}</h5>
         <span class="text-muted">${listPost[i].node.__typename}</span>
         <p class="card-text" id="node-text${i}"></p>
-        <p class="card-text d-flex justify-content-end"><button class="btn btn-light" id="details-${i}">Details</button></p>
       </div>
     </div>
   </div>`;
@@ -164,7 +163,13 @@ function userPost(res) {
       caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
       listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
       if (listPost[i].node.__typename == 'GraphSidecar') {
-        childPostList(listPost[i].node.edge_sidecar_to_children);
+       // childPostList(listPost[i].node.edge_sidecar_to_children);
+       let pBtnDetails = document.createElement('p');
+       pBtnDetails.setAttribute('class','d-flex');
+       pBtnDetails.classList.add('justify-content-end');
+       pBtnDetails.innerHTML =`<button class="btn btn-light" id="details-${i}">Details</button>`;
+       document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
+      // childPostList();
       }
     }
 
@@ -173,42 +178,18 @@ function userPost(res) {
 }
 
 function childPostList(res) {
-  let modalBodyChildPost = document.createElement('div');
-  modalBodyChildPost.setAttribute('class', 'modal');
-  modalBodyChildPost.classList.add('fade');
-  modalBodyChildPost.classList.add('zoom');
-  modalBodyChildPost.setAttribute('id', 'childPost');
-  modalBodyChildPost.setAttribute('tabindex', '-1');
-  modalBodyChildPost.setAttribute('aria-labelledby', 'childPostLabel');
-  modalBodyChildPost.setAttribute('aria-hidden', 'true');
-  modalBodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body" style="padding: 0px;">
-<div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="${proxyHeroku}${res.edges[0].node.display_url}" class="d-block w-100" alt="sidecar-0" crossorigin="anonymous">
-      </div>
-      <div class="carousel-item">
-      <img src="${proxyHeroku}${res.edges[1].node.display_url}" class="d-block w-100" alt="sidecar-1"crossorigin="anonymous">
-      </div>
-    </div>
-  </div>
-  <div id="btn-control">
-  <button class="carousel-control-prev bg-dark rounded-end button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev" style="height: 50px; width: 35px; margin-top: 225px;" id="prev">
-    <span class="carousel-control-prev-icon" style="text-shadow: 2px 2px 2px black;" id="icon-prev"></span>
-  </button>
-  <button class="carousel-control-next bg-dark rounded-start button-control" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next" style="height: 50px; width: 35px; margin-top: 225px;" id="next">
-    <span class="carousel-control-next-icon" id="icon-next"></span>
-  </button>
-  </div>
-</div>
-      </div>
-    </div>`;
-  containerResult.insertBefore(modalBodyChildPost, footerResult);
-  let buttonDetails = document.getElementById('details-1');
-  buttonDetails.setAttribute('data-bs-target', '#childPost');
-  buttonDetails.setAttribute('data-bs-toggle', 'modal');
+ let bodyChildPost = document.createElement('div');
+ bodyChildPost.setAttribute('class','collapse');
+ bodyChildPost.setAttribute('id','body-child-post');
+ bodyChildPost.innerHTML = `<div class="card card-body bg-dark text-white d-flex justify-content-between">
+    <img src="../asset/favicon.ico" class="img-fluid my-1 mx-1" alt="post-images" style="width: 1w ! important; height: 1w !important;" crossorigin="anonymous">
+  </div>`;
+  containerResult.insertBefore(bodyChildPost,footerResult);
+  let btnDetails = document.getElementById('details');
+  btnDetails.setAttribute('data-bs-toggle','collapse');
+  btnDetails.setAttribute('data-bs-target','#body-child-post');
+  btnDetails.setAttribute('aria-expanded','false');
+  btnDetails.setAttribute('aria-controls','body-child-post');
 }
 function modalProfile(res) {
   let popupModal = document.createElement('div');
@@ -259,9 +240,7 @@ function bodyClick(event) {
 //   </div>
 // </div>`;
 //   containerResult.insertBefore(cards, footerResult);
-//   let imgSrc = document.getElementById('main-img').getAttribute('src');
-//   console.log(imgSrc);
-//   childPostList(imgSrc);
+//   childPostList();
 // }
 // test();
 function errorHandle() {
