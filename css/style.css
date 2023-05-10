@@ -1,3 +1,4 @@
+
 .all-blur:after {
   position: absolute;
   top: 0;
@@ -194,5 +195,15 @@ button #btn-radio {
 
   100% {
     transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}
+
+.blink_icon {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
 }

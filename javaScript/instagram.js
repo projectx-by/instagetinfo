@@ -115,7 +115,7 @@ function userPost(res) {
   headerPost.setAttribute('class', 'text-white');
   headerPost.setAttribute('class', 'ms-3');
   headerPost.setAttribute('id', 'header-post');
-  headerPost.textContent = `Post From @${res.response.body.data.user.username}`;
+  headerPost.innerHTML = `<span>Post From @<a href="https://www.instagram.com/${res.response.body.data.user.username}/" class="text-white">${res.response.body.data.user.username}</a></span>`;
   containerResult.insertBefore(headerPost, footerResult);
   let listPost = res.response.body.data.user.edge_owner_to_timeline_media.edges;
   if (listPost.length == 0 || res.response.body.data.user.is_private == true) {
@@ -144,7 +144,7 @@ function userPost(res) {
       bodyPost.classList.add('bg-dark');
       bodyPost.classList.add('rounded');
       bodyPost.setAttribute('id', 'body-post');
-      bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none;');
+      bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none; position: relative;');
 
       bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
     <div class="col-md-4">
@@ -166,10 +166,15 @@ function userPost(res) {
        // childPostList(listPost[i].node.edge_sidecar_to_children);
        let pBtnDetails = document.createElement('p');
        pBtnDetails.setAttribute('class','d-flex');
+       pBtnDetails.setAttribute('id',`details-${i}`);
+       pBtnDetails.setAttribute('style',`position:absolute;bottom:0;right:5px;z-index:100;`);
        pBtnDetails.classList.add('justify-content-end');
-       pBtnDetails.innerHTML =`<button class="btn btn-light" id="details-${i}">Details</button>`;
+       pBtnDetails.classList.add('blink_icon');
+       pBtnDetails.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+</svg>`;
        document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
-      // childPostList();
+     // childPostList("",i);
       }
     }
 
@@ -177,19 +182,62 @@ function userPost(res) {
   }
 }
 
-function childPostList(res) {
- let bodyChildPost = document.createElement('div');
- bodyChildPost.setAttribute('class','collapse');
- bodyChildPost.setAttribute('id','body-child-post');
- bodyChildPost.innerHTML = `<div class="card card-body bg-dark text-white d-flex justify-content-between">
-    <img src="../asset/favicon.ico" class="img-fluid my-1 mx-1" alt="post-images" style="width: 1w ! important; height: 1w !important;" crossorigin="anonymous">
+function childPostList(res,postOrder) {
+  let bodyChildPost = document.createElement('div');
+  bodyChildPost.setAttribute('aria-labelledby',`child-post-${i}-Label`);
+  bodyChildPost.setAttribute('tabindex','-1');
+  bodyChildPost.setAttribute('aria-hidden','true');
+  bodyChildPost.setAttribute('id',`child-post-${i}`);
+  bodyChildPost.setAttribute('class','modal');
+  bodyChildPost.classList.add('class','zoom');
+  bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        Show a second modal and hide this one with the button below. IMAGE HERE
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open second modal</button>
+      </div>
+    </div>
   </div>`;
-  containerResult.insertBefore(bodyChildPost,footerResult);
-  let btnDetails = document.getElementById('details');
-  btnDetails.setAttribute('data-bs-toggle','collapse');
-  btnDetails.setAttribute('data-bs-target','#body-child-post');
-  btnDetails.setAttribute('aria-expanded','false');
-  btnDetails.setAttribute('aria-controls','body-child-post');
+
+
+
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Hide this modal and show the first with the button below.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to first</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a>`;
+// let bodyChildPost = document.createElement('div');
+// bodyChildPost.setAttribute('class','collapse');
+// bodyChildPost.setAttribute('style','border:none;outline:none;');
+// bodyChildPost.setAttribute('id',`body-child-post-${postOrder}`);
+// bodyChildPost.innerHTML = `<div class="card card-body bg-dark text-white d-flex justify-content-between" id="child-post-list" style="border:none;outline:none;">
+//     <img src="../asset/favicon.ico" class="img-fluid my-1 mx-1" alt="post-images" style="width: 1w ! important; height: 1w !important;" crossorigin="anonymous">
+//     <img src="../asset/favicon.ico" class="img-fluid my-1 mx-1" alt="post-images" style="width: 1w ! important; height: 1w !important;" crossorigin="anonymous">
+//     <img src="../asset/favicon.ico" class="img-fluid my-1 mx-1" alt="post-images" style="width: 1w ! important; height: 1w !important;" crossorigin="anonymous">
+//   </div>`;
+//   document.getElementById(`card-body-${postOrder}`).appendChild(bodyChildPost);
+//   let btnDetails = document.getElementById(`details-${postOrder}`);
+//   btnDetails.setAttribute('data-bs-toggle','collapse');
+//   btnDetails.setAttribute('data-bs-target',`#body-child-post-${postOrder}`);
+//   btnDetails.setAttribute('aria-expanded','false');
+//   btnDetails.setAttribute('aria-controls',`body-child-post-${postOrder}`);
 }
 function modalProfile(res) {
   let popupModal = document.createElement('div');
