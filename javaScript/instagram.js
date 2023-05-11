@@ -163,18 +163,18 @@ function userPost(res) {
       caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
       listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
       if (listPost[i].node.__typename == 'GraphSidecar') {
-       // childPostList(listPost[i].node.edge_sidecar_to_children);
-       let pBtnDetails = document.createElement('p');
-       pBtnDetails.setAttribute('class','d-flex');
-       pBtnDetails.setAttribute('id',`details-${i}`);
-       pBtnDetails.setAttribute('style',`position:absolute;bottom:0;right:5px;z-index:100;`);
-       pBtnDetails.classList.add('justify-content-end');
-       pBtnDetails.classList.add('blink_icon');
-       pBtnDetails.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+        // childPostList(listPost[i].node.edge_sidecar_to_children);
+        let pBtnDetails = document.createElement('p');
+        pBtnDetails.setAttribute('class', 'd-flex');
+        pBtnDetails.setAttribute('id', `details-${i}`);
+        pBtnDetails.setAttribute('style', `position:absolute;bottom:0;right:5px;z-index:100;`);
+        pBtnDetails.classList.add('justify-content-end');
+        pBtnDetails.classList.add('blink_icon');
+        pBtnDetails.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
 </svg>`;
-       document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
-     // childPostList("",i);
+        document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
+        // childPostList("",i);
       }
     }
 
@@ -182,28 +182,61 @@ function userPost(res) {
   }
 }
 
-function childPostList(res,postOrder) {
-  let bodyChildPost = document.createElement('div');
-  bodyChildPost.setAttribute('aria-labelledby',`child-post-${i}-Label`);
-  bodyChildPost.setAttribute('tabindex','-1');
-  bodyChildPost.setAttribute('aria-hidden','true');
-  bodyChildPost.setAttribute('id',`child-post-${i}`);
-  bodyChildPost.setAttribute('class','modal');
-  bodyChildPost.classList.add('class','zoom');
-  bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body">
-        Show a second modal and hide this one with the button below. IMAGE HERE
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Open second modal</button>
-      </div>
-    </div>
+function childPostList(res, postOrder) {
+  let lengthChild = ['', '', '', ''];
+  let lengthChildIndex = 0;
+  let btnPrev, btnNext;
+  for (i = 0; i < lengthChild.length; i++) {
+    if (i == 0) {
+      btnPrev = lengthChild.length - 1;
+      btnNext = i + 1;
+    }
+    if (i < lengthChild.length) {
+      btnNext += 1;
+    }
+    if (i == (lengthChild.length - 1)) {
+      btnNext = 0;
+      btnPrev = lengthChild.length - i;
+    }
+    let bodyChildPost = document.createElement('div');
+    bodyChildPost.setAttribute('aria-labelledby', `child-post-${i}-Label`);
+    bodyChildPost.setAttribute('tabindex', '-1');
+    bodyChildPost.setAttribute('aria-hidden', 'true');
+    bodyChildPost.setAttribute('id', `child-post-${i}`);
+    bodyChildPost.setAttribute('class', 'modal');
+    bodyChildPost.classList.add('zoom');
+    bodyChildPost.classList.add('fade');
+    bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content" id="modalContent-${i}">
+  <div class="modal-body text-dark">
+  IMAGE HERE ${i}
+  </div>
+  <div class="modal-footer d-flex justify-content-between" id="modal-footer">
+      <button class="btn btn-primary" data-bs-target="#child-post-${btnPrev} " data-bs-toggle="modal" id="prev">Prev</button><button class="btn btn-primary" data-bs-target="#child-post-${btnNext}" data-bs-toggle="modal" id="next">Next</button>
+  </div>
+  </div>
   </div>`;
+    containerResult.insertBefore(bodyChildPost, footerResult);
+  }
+}
 
-
-
-<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+function test() {
+  let cards = document.createElement('div');
+  cards.setAttribute('class', 'card');
+  cards.setAttribute('id', 'card-img');
+  cards.setAttribute('style', 'width: 18rem;');
+  cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#child-post-0">open First Modal</a>
+  </div>
+</div>`;
+  containerResult.insertBefore(cards, footerResult);
+  childPostList();
+}
+test();
+/* <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -218,11 +251,9 @@ function childPostList(res,postOrder) {
       </div>
     </div>
   </div>
-</div>
+</div> */
 
-
-
-<a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a>`;
+/* <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Open first modal</a>`; */
 // let bodyChildPost = document.createElement('div');
 // bodyChildPost.setAttribute('class','collapse');
 // bodyChildPost.setAttribute('style','border:none;outline:none;');
@@ -238,7 +269,7 @@ function childPostList(res,postOrder) {
 //   btnDetails.setAttribute('data-bs-target',`#body-child-post-${postOrder}`);
 //   btnDetails.setAttribute('aria-expanded','false');
 //   btnDetails.setAttribute('aria-controls',`body-child-post-${postOrder}`);
-}
+
 function modalProfile(res) {
   let popupModal = document.createElement('div');
   popupModal.setAttribute('class', 'modal');
@@ -275,22 +306,7 @@ function bodyClick(event) {
     document.body.classList.remove('all-blur');
   }
 }
-// function test() {
-//   let cards = document.createElement('div');
-//   cards.setAttribute('class', 'card');
-//   cards.setAttribute('id', 'card-img');
-//   cards.setAttribute('style', 'width: 18rem;');
-//   cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-//   <div class="card-body">
-//     <h5 class="card-title">Card title</h5>
-//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-//     <a href="#" class="btn btn-primary" id="details">Details</a>
-//   </div>
-// </div>`;
-//   containerResult.insertBefore(cards, footerResult);
-//   childPostList();
-// }
-// test();
+
 function errorHandle() {
   let errorMessage = document.createElement('div');
   errorMessage.setAttribute('id', 'error-message');
