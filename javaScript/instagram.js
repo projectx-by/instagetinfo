@@ -174,97 +174,98 @@ function userPost(res) {
   <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
 </svg>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
-        // childPostList("",i);
+        // childPostList("", i);
       }
+      // document.getElementById(`details-${i}`).addEventListener('click', () => {
+      //   showSlides(slideIndex);
+      //   document.body.classList.add('all-blur');
+
+      // });
     }
 
 
   }
 }
 
-function childPostList(res) {
-    let bodyChildPost = document.createElement('div');
-    bodyChildPost.setAttribute('aria-labelledby', `child-post-Label`);
-    bodyChildPost.setAttribute('tabindex', '-1');
-    bodyChildPost.setAttribute('id', 'child-post-0');
-    bodyChildPost.setAttribute('aria-hidden', 'true');
-    bodyChildPost.setAttribute('class', 'modal');
-    bodyChildPost.classList.add('zoom');
-    bodyChildPost.classList.add('fade');
-    bodyChildPost.classList.add('child-post');
-    bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content">
-  <div class="modal-body text-dark" id="modal-body">
-  </div>
-  </div>
-  </div>`;
-  containerResult.insertBefore(bodyChildPost,footerResult);
-  let  containerSlideshow = document.createElement('div');
-  containerSlideshow.setAttribute('class','container-slide');
-  for(i = 0;i<3;i++){
-  let slideContent = document.createElement('div');
-  slideContent.setAttribute('id','mySlides-i');
-  slideContent.setAttribute('class','mySlides');
-  slideContent.classList.add('my-fade');
-  slideContent.innerHTML = `<div class="numbertext">${i+1} / 3</div><img src="../asset/favicon.ico" style="width: 100%;">`;
-  containerSlideshow.appendChild(slideContent);
-  }
-  let  pBtnControl= document.createElement('p');
-  pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
-</svg></a>
-<a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-</svg></a>`;
-containerSlideshow.appendChild(pBtnControl);
-document.getElementById('modal-body').appendChild(containerSlideshow);
+// function childPostList(res) {
+//   let bodyChildPost = document.createElement('div');
+//   bodyChildPost.setAttribute('aria-labelledby', `child-post-Label`);
+//   bodyChildPost.setAttribute('tabindex', '-1');
+//   bodyChildPost.setAttribute('id', 'child-post-0');
+//   bodyChildPost.setAttribute('aria-hidden', 'true');
+//   bodyChildPost.setAttribute('class', 'modal');
+//   bodyChildPost.classList.add('zoom');
+//   bodyChildPost.classList.add('fade');
+//   bodyChildPost.classList.add('child-post');
+//   bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+//   <div class="modal-content">
+//   <div class="modal-body text-dark" id="modal-body">
+//   </div>
+//   </div>
+//   </div>`;
+//   containerResult.insertBefore(bodyChildPost, footerResult);
+//   let containerSlideshow = document.createElement('div');
+//   containerSlideshow.setAttribute('class', 'container-slide');
+//   for (i = 0; i < 3; i++) {
+//     let slideContent = document.createElement('div');
+//     slideContent.setAttribute('id', 'mySlides-i');
+//     slideContent.setAttribute('class', 'mySlides');
+//     slideContent.classList.add('my-fade');
+//     slideContent.innerHTML = `<div class="numbertext">${i + 1} / 3</div><img src="../asset/favicon.ico" style="width: 100%;">`;
+//     containerSlideshow.appendChild(slideContent);
+//   }
+//   let pBtnControl = document.createElement('p');
+//   pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+//   <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+// </svg></a>
+// <a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+//   <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+// </svg></a>`;
+//   containerSlideshow.appendChild(pBtnControl);
+//   document.getElementById('modal-body').appendChild(containerSlideshow);
 
 
-}
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
+// }
+// function plusSlides(n) {
+//   showSlides(slideIndex += n);
+// }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-function showSlides(n) {
-  let slides = document.getElementsByClassName("mySlides");
-  console.log(slides[n])
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-    console.log(slides[i])
-  }
-  slides[slideIndex-1].style.display = "block";  
-  console.log(slides[slideIndex-1])
+// function currentSlide(n) {
+//   showSlides(slideIndex = n);
+// }
+// function showSlides(n) {
+//   let slides = document.getElementsByClassName("mySlides");
+//   console.log(slides[n])
+//   if (n > slides.length) { slideIndex = 1 }
+//   if (n < 1) { slideIndex = slides.length }
+//   for (i = 0; i < slides.length; i++) {
+//     slides[i].style.display = "none";
+//     console.log(slides[i])
+//   }
+//   slides[slideIndex - 1].style.display = "block";
+//   console.log(slides[slideIndex - 1])
 
-}
+// }
 
 
-function test() {
-  let cards = document.createElement('div');
-  cards.setAttribute('class', 'card');
-  cards.setAttribute('id', 'card-img');
-  cards.setAttribute('style', 'width: 18rem;');
-  cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#child-post-0">open First Modal</a>
-  </div>
-</div>`;
-  containerResult.insertBefore(cards, footerResult);
-  childPostList();
-}
-test();
-let slideIndex = 1;
-document.getElementById('details').addEventListener('click', () =>{
-  showSlides(slideIndex);
-  document.body.classList.add('all-blur');
-  
-});
+// function test() {
+//   let cards = document.createElement('div');
+//   cards.setAttribute('class', 'card');
+//   cards.setAttribute('id', 'card-img');
+//   cards.setAttribute('style', 'width: 18rem;');
+//   cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+//   <div class="card-body">
+//     <h5 class="card-title">Card title</h5>
+//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+//     <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#child-post-0">open First Modal</a>
+//   </div>
+// </div>`;
+//   containerResult.insertBefore(cards, footerResult);
+//   childPostList();
+// }
+// test();
+// let slideIndex = 1;
+
 /* <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -336,6 +337,9 @@ function bodyClick(event) {
   }
   console.log(event)
   // if (event.target.)
+}
+function keyCode(event) {
+  if (event.keyCode == 27) document.body.classList.remove('all-blur');
 }
 
 function errorHandle() {
