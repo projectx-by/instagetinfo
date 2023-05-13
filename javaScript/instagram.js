@@ -36,6 +36,21 @@ inputForm.addEventListener('focusout', () => {
   radioButtonDiv.classList.remove('bg-secondary');
 })
 
+let btnRadioClose = document.getElementById('btn-radio-close');
+btnRadioClose.addEventListener('click', () => {
+  if (document.getElementById('input-username').checked == true) {
+    document.getElementById('btn-checked').textContent = 'Username';
+    inputForm.setAttribute('placeholder', 'ex: 0xwildcard');
+    inputForm.setAttribute('type', 'text');
+    inputForm.value = '';
+  } else {
+    document.getElementById('btn-checked').textContent = 'User ID';
+    inputForm.setAttribute('placeholder', 'ex: 7430039768');
+    inputForm.setAttribute('type', 'number');
+    inputForm.value = '';
+  }
+})
+
 async function executed() {
   if (containerResult.hasChildNodes()) {
     containerResult.innerHTML = '';
@@ -49,8 +64,13 @@ async function executed() {
     responseAPI = await getInfo(getByUsername, userInfo)
   } else {
     let tempResponApi = await getInfo(getByID, userInfo);
-    convertIdToUsername(tempResponApi);
-    responseAPI = await getInfo(getByUsername, userInfo)
+    try {
+      convertIdToUsername(tempResponApi);
+      responseAPI = await getInfo(getByUsername, userInfo)
+    } catch {
+      document.getElementById('loader').remove();
+      errorHandle()
+    };
   }
   console.log(responseAPI);
   setTimeout(function () {
@@ -76,7 +96,7 @@ function profile(res) {
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
       <div class="rounded-circle border border-dark" style="overflow: hidden; width: max-content;">
-        <img src="${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;" id="main-img">
+        <img src="${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;cursor:pointer;" id="main-img">
       </div>
     </div>
     <div class="col-md-8">
@@ -172,7 +192,7 @@ function userPost(res) {
         pBtnDetails.setAttribute('data-bs-target', `#posts${i}`)
         pBtnDetails.setAttribute('data-bs-toggle', 'modal');
         pBtnDetails.setAttribute('onclick', `showSlides(1,${i})`);
-        pBtnDetails.setAttribute('style', `position:absolute;bottom:0;right:5px;z-index:100;`);
+        pBtnDetails.setAttribute('style', `position:absolute;bottom:0;right:5px;z-index:100;cursor:pointer;`);
         pBtnDetails.classList.add('justify-content-end');
         pBtnDetails.classList.add('blink_icon');
         pBtnDetails.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
@@ -181,10 +201,10 @@ function userPost(res) {
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
         childPostList(childList, i);
       }
-      
-      if (listPost[i].node.__typename == 'GraphVideo'){
+
+      if (listPost[i].node.__typename == 'GraphVideo') {
         let pBtnDetails = document.createElement('p');
-        pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;"><a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+        pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;cursor:pointer;"><a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
   <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
 </svg></a></div>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
@@ -231,7 +251,7 @@ function childPostList(resPostOrder, modalId) {
   <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
 </svg></a>`;
   document.getElementById(`container-slide${modalId}`).appendChild(pBtnControl);
- console.log(document.getElementById(`container-slide${modalId}`).children);
+  console.log(document.getElementById(`container-slide${modalId}`).children);
 }
 // function childPostList(res) {
 //   let bodyChildPost = document.createElement('div');
@@ -272,15 +292,15 @@ function childPostList(resPostOrder, modalId) {
 
 
 // }
-let slideIndex= 1;
-function plusSlides(n,slideOfPost) {
-  showSlides(slideIndex += n,slideOfPost);
+let slideIndex = 1;
+function plusSlides(n, slideOfPost) {
+  showSlides(slideIndex += n, slideOfPost);
 }
 
-function currentSlide(n,slideOfPost) {
-  showSlides(slideIndex = n,slideOfPost);
+function currentSlide(n, slideOfPost) {
+  showSlides(slideIndex = n, slideOfPost);
 }
-function showSlides(n,slideOfPost) {
+function showSlides(n, slideOfPost) {
   let slides = document.getElementsByClassName(`my${slideOfPost}`);
   console.log(slides)
   if (n > slides.length) { slideIndex = 1 }
@@ -397,17 +417,6 @@ function errorHandle() {
   errorMessage.innerHTML = `<h3 class="text-danger text-center">404</h3><section class="d-flex justify-content-center"><span style="text-align: justify;" class="mx-5">Oops! Page not found. You are looking for something that doesn't actually exist. Please, check your connection and Username or userID then try again.</span></section>`;
   containerResult.insertBefore(errorMessage, footerResult);
 }
-
-let btnRadioClose = document.getElementById('btn-radio-close');
-btnRadioClose.addEventListener('click', () => {
-  if (document.getElementById('input-username').checked == true) {
-    document.getElementById('btn-checked').textContent = 'Username';
-    document.getElementById('keyword').setAttribute('placeholder', 'ex: 0xwildcard');
-  } else {
-    document.getElementById('btn-checked').textContent = 'User ID';
-    document.getElementById('keyword').setAttribute('placeholder', 'ex: 7430039768');
-  }
-})
 
 function loadingEffect() {
   let loadingEvent = document.createElement("div");
