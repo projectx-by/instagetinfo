@@ -148,7 +148,7 @@ function userPost(res) {
 
       bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
     <div class="col-md-4">
-      <img src="${proxyHeroku}${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
+      <img src="${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
     </div>
     <div class="col-md-8">
       <div class="card-body text-white" id="card-body-${i}">
@@ -162,11 +162,16 @@ function userPost(res) {
       let caption = document.getElementById(`caption${i}`);
       caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
       listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
+
       if (listPost[i].node.__typename == 'GraphSidecar') {
         // childPostList(listPost[i].node.edge_sidecar_to_children);
+        let childList = listPost[i].node.edge_sidecar_to_children.edges;
         let pBtnDetails = document.createElement('p');
         pBtnDetails.setAttribute('class', 'd-flex');
         pBtnDetails.setAttribute('id', `details-${i}`);
+        pBtnDetails.setAttribute('data-bs-target', `#posts${i}`)
+        pBtnDetails.setAttribute('data-bs-toggle', 'modal');
+        pBtnDetails.setAttribute('onclick', 'showSlides(slideIndex)')
         pBtnDetails.setAttribute('style', `position:absolute;bottom:0;right:5px;z-index:100;`);
         pBtnDetails.classList.add('justify-content-end');
         pBtnDetails.classList.add('blink_icon');
@@ -174,7 +179,7 @@ function userPost(res) {
   <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
 </svg>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
-        // childPostList("", i);
+        childPostList(childList, i);
       }
       // document.getElementById(`details-${i}`).addEventListener('click', () => {
       //   showSlides(slideIndex);
@@ -186,7 +191,39 @@ function userPost(res) {
 
   }
 }
-
+function childPostList(resPostOrder, modalId) {
+  let divModal = document.createElement('div');
+  divModal.innerHTML = `<div class="modal fade zoom" id="posts${modalId}" tabindex="-1" aria-labelledby="posts${modalId}Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+          <div class="container-slide" id="container-slide${modalId}">
+          </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+  containerResult.insertBefore(divModal, footerResult);
+  console.log(`post ke ${modalId} has childpost ${resPostOrder.length}`);
+  for (indexChild = 0; indexChild < resPostOrder.length; indexChild++) {
+    console.log(resPostOrder[indexChild].node.display_url);
+    let slideContent = document.createElement('div');
+    slideContent.innerHTML = `<div class="mySlides my-fade"><div class="numbertext">${indexChild + 1}/${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width: 100%" alt="post-child" crossorigin="anonymous"></div>`;
+    // slideContent.setAttribute('class', 'mySlides');
+    // slideContent.classList.add('my-fade');
+    // slideContent.innerHTML = `<div class="numbertext">${i + 1} / ${resPostOrder.length}</div><img src="${proxyHeroku}${resPostOrder[i].node.display_url}" style="width: 100%;">`;
+    document.getElementById(`container-slide${modalId}`).appendChild(slideContent);
+    // console.log('this looping');
+  }
+  let pBtnControl = document.createElement('p');
+  pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+</svg></a>
+<a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+</svg></a>`;
+  document.getElementById(`container-slide${modalId}`).appendChild(pBtnControl);
+}
 // function childPostList(res) {
 //   let bodyChildPost = document.createElement('div');
 //   bodyChildPost.setAttribute('aria-labelledby', `child-post-Label`);
@@ -203,9 +240,9 @@ function userPost(res) {
 //   </div>
 //   </div>
 //   </div>`;
-//   containerResult.insertBefore(bodyChildPost, footerResult);
 //   let containerSlideshow = document.createElement('div');
 //   containerSlideshow.setAttribute('class', 'container-slide');
+//   containerResult.insertBefore(bodyChildPost, footerResult);
 //   for (i = 0; i < 3; i++) {
 //     let slideContent = document.createElement('div');
 //     slideContent.setAttribute('id', 'mySlides-i');
@@ -226,26 +263,28 @@ function userPost(res) {
 
 
 // }
-// function plusSlides(n) {
-//   showSlides(slideIndex += n);
-// }
+let slideIndex = 1;
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
 
-// function currentSlide(n) {
-//   showSlides(slideIndex = n);
-// }
-// function showSlides(n) {
-//   let slides = document.getElementsByClassName("mySlides");
-//   console.log(slides[n])
-//   if (n > slides.length) { slideIndex = 1 }
-//   if (n < 1) { slideIndex = slides.length }
-//   for (i = 0; i < slides.length; i++) {
-//     slides[i].style.display = "none";
-//     console.log(slides[i])
-//   }
-//   slides[slideIndex - 1].style.display = "block";
-//   console.log(slides[slideIndex - 1])
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+function showSlides(n) {
+  let slides = document.getElementsByClassName("mySlides");
+  console.log(slides)
+  if (n > slides.length) { slideIndex = 1 }
+  if (n < 1) { slideIndex = slides.length }
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+    console.log(slides[i])
+  }
+  console.log(slides[slideIndex - 1])
+  slides[slideIndex - 1].style.display = "block";
 
-// }
+}
+
 
 
 // function test() {
@@ -264,7 +303,7 @@ function userPost(res) {
 //   childPostList();
 // }
 // test();
-// let slideIndex = 1;
+// 
 
 /* <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
