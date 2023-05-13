@@ -115,7 +115,7 @@ function userPost(res) {
   headerPost.setAttribute('class', 'text-white');
   headerPost.setAttribute('class', 'ms-3');
   headerPost.setAttribute('id', 'header-post');
-  headerPost.innerHTML = `<span>Post From @<a href="https://www.instagram.com/${res.response.body.data.user.username}/" class="text-white">${res.response.body.data.user.username}</a></span>`;
+  headerPost.innerHTML = `<span>Latest Post From @<a href="https://www.instagram.com/${res.response.body.data.user.username}/" class="text-white">${res.response.body.data.user.username}</a></span>`;
   containerResult.insertBefore(headerPost, footerResult);
   let listPost = res.response.body.data.user.edge_owner_to_timeline_media.edges;
   if (listPost.length == 0 || res.response.body.data.user.is_private == true) {
@@ -180,6 +180,14 @@ function userPost(res) {
 </svg>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
         childPostList(childList, i);
+      }
+      
+      if (listPost[i].node.__typename == 'GraphVideo'){
+        let pBtnDetails = document.createElement('p');
+        pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;"><a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+  <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+</svg></a></div>`;
+        document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
       }
       // document.getElementById(`details-${i}`).addEventListener('click', () => {
       //   showSlides(slideIndex);
