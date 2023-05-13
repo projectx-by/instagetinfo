@@ -76,7 +76,7 @@ function profile(res) {
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
       <div class="rounded-circle border border-dark" style="overflow: hidden; width: max-content;">
-        <img src="${proxyHeroku}${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;" id="main-img">
+        <img src="${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;" id="main-img">
       </div>
     </div>
     <div class="col-md-8">
@@ -171,7 +171,7 @@ function userPost(res) {
         pBtnDetails.setAttribute('id', `details-${i}`);
         pBtnDetails.setAttribute('data-bs-target', `#posts${i}`)
         pBtnDetails.setAttribute('data-bs-toggle', 'modal');
-        pBtnDetails.setAttribute('onclick', 'showSlides(slideIndex)')
+        pBtnDetails.setAttribute('onclick', `showSlides(1,${i})`);
         pBtnDetails.setAttribute('style', `position:absolute;bottom:0;right:5px;z-index:100;`);
         pBtnDetails.classList.add('justify-content-end');
         pBtnDetails.classList.add('blink_icon');
@@ -206,9 +206,9 @@ function childPostList(resPostOrder, modalId) {
   containerResult.insertBefore(divModal, footerResult);
   console.log(`post ke ${modalId} has childpost ${resPostOrder.length}`);
   for (indexChild = 0; indexChild < resPostOrder.length; indexChild++) {
-    console.log(resPostOrder[indexChild].node.display_url);
+    // console.log(resPostOrder[indexChild].node.display_url);
     let slideContent = document.createElement('div');
-    slideContent.innerHTML = `<div class="mySlides my-fade"><div class="numbertext">${indexChild + 1}/${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width: 100%" alt="post-child" crossorigin="anonymous"></div>`;
+    slideContent.innerHTML = `<div class="mySlides my-fade my${modalId}"><div class="numbertext">${indexChild + 1}/${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width: 100%" alt="post-child" crossorigin="anonymous"></div>`;
     // slideContent.setAttribute('class', 'mySlides');
     // slideContent.classList.add('my-fade');
     // slideContent.innerHTML = `<div class="numbertext">${i + 1} / ${resPostOrder.length}</div><img src="${proxyHeroku}${resPostOrder[i].node.display_url}" style="width: 100%;">`;
@@ -216,13 +216,14 @@ function childPostList(resPostOrder, modalId) {
     // console.log('this looping');
   }
   let pBtnControl = document.createElement('p');
-  pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+  pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1,${modalId})"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
 </svg></a>
-<a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+<a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1,${modalId})"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
 </svg></a>`;
   document.getElementById(`container-slide${modalId}`).appendChild(pBtnControl);
+ console.log(document.getElementById(`container-slide${modalId}`).children);
 }
 // function childPostList(res) {
 //   let bodyChildPost = document.createElement('div');
@@ -263,16 +264,16 @@ function childPostList(resPostOrder, modalId) {
 
 
 // }
-let slideIndex = 1;
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+let slideIndex= 1;
+function plusSlides(n,slideOfPost) {
+  showSlides(slideIndex += n,slideOfPost);
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+function currentSlide(n,slideOfPost) {
+  showSlides(slideIndex = n,slideOfPost);
 }
-function showSlides(n) {
-  let slides = document.getElementsByClassName("mySlides");
+function showSlides(n,slideOfPost) {
+  let slides = document.getElementsByClassName(`my${slideOfPost}`);
   console.log(slides)
   if (n > slides.length) { slideIndex = 1 }
   if (n < 1) { slideIndex = slides.length }
@@ -371,8 +372,9 @@ function modalProfile(res) {
   })
 }
 function bodyClick(event) {
-  if (event.target.id == 'modalProfile' || event.target.classList.contains('child-post')) {
+  if (event.target.id == 'modalProfile' || event.target.classList.contains('child-post') || event.target.classList.contains('zoom')) {
     document.body.classList.remove('all-blur');
+    slideIndex = 1;
   }
   console.log(event)
   // if (event.target.)
