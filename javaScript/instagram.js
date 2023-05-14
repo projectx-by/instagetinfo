@@ -204,10 +204,12 @@ function userPost(res) {
 
       if (listPost[i].node.__typename == 'GraphVideo') {
         let pBtnDetails = document.createElement('p');
-        pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;cursor:pointer;"><a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+        pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;cursor:pointer;" data-bs-target="#posts${i}" data-bs-toggle="modal"><!--<a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank">--><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
   <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
 </svg></a></div>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
+        modalVideo(listPost[i].node,i);
+        
       }
       // document.getElementById(`details-${i}`).addEventListener('click', () => {
       //   showSlides(slideIndex);
@@ -253,45 +255,24 @@ function childPostList(resPostOrder, modalId) {
   document.getElementById(`container-slide${modalId}`).appendChild(pBtnControl);
   console.log(document.getElementById(`container-slide${modalId}`).children);
 }
-// function childPostList(res) {
-//   let bodyChildPost = document.createElement('div');
-//   bodyChildPost.setAttribute('aria-labelledby', `child-post-Label`);
-//   bodyChildPost.setAttribute('tabindex', '-1');
-//   bodyChildPost.setAttribute('id', 'child-post-0');
-//   bodyChildPost.setAttribute('aria-hidden', 'true');
-//   bodyChildPost.setAttribute('class', 'modal');
-//   bodyChildPost.classList.add('zoom');
-//   bodyChildPost.classList.add('fade');
-//   bodyChildPost.classList.add('child-post');
-//   bodyChildPost.innerHTML = `<div class="modal-dialog modal-dialog-centered">
-//   <div class="modal-content">
-//   <div class="modal-body text-dark" id="modal-body">
-//   </div>
-//   </div>
-//   </div>`;
-//   let containerSlideshow = document.createElement('div');
-//   containerSlideshow.setAttribute('class', 'container-slide');
-//   containerResult.insertBefore(bodyChildPost, footerResult);
-//   for (i = 0; i < 3; i++) {
-//     let slideContent = document.createElement('div');
-//     slideContent.setAttribute('id', 'mySlides-i');
-//     slideContent.setAttribute('class', 'mySlides');
-//     slideContent.classList.add('my-fade');
-//     slideContent.innerHTML = `<div class="numbertext">${i + 1} / 3</div><img src="../asset/favicon.ico" style="width: 100%;">`;
-//     containerSlideshow.appendChild(slideContent);
-//   }
-//   let pBtnControl = document.createElement('p');
-//   pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
-//   <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
-// </svg></a>
-// <a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
-//   <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-// </svg></a>`;
-//   containerSlideshow.appendChild(pBtnControl);
-//   document.getElementById('modal-body').appendChild(containerSlideshow);
-
-
-// }
+function modalVideo(postOrder,modalId){
+  let divModal = document.createElement('div');
+  divModal.innerHTML = `<div class="modal fade zoom" id="posts${modalId}" tabindex="-1" aria-labelledby="posts${modalId}Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body d-flex justify-content-center">
+      <a href="${postOrder.video_url}" target="_blank" class="text-decoration-none text-dark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+</svg></a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+containerResult.insertBefore(divModal,footerResult);
+}
 let slideIndex = 1;
 function plusSlides(n, slideOfPost) {
   showSlides(slideIndex += n, slideOfPost);
@@ -314,6 +295,36 @@ function showSlides(n, slideOfPost) {
 
 }
 
+// function testModal(){
+//   let divModal = document.createElement('div');
+//   divModal.innerHTML = `<!-- Modal -->
+// <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+//   <div class="modal-dialog">
+//     <div class="modal-content">
+//       <div class="modal-header">
+//         <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+//         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+//       </div>
+//       <div class="modal-body">
+//         <h1>The video autoplay attribute</h1>
+// <video width="320" height="240" controls autoplay>
+//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/mp4" crossorigin="anonymous">
+//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/ogg" crossorigin="anonymous">
+//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/webm" crossorigin="anonymous">
+//   Your browser does not support the video tag.
+// </video>
+// <img src="" crossorigin="anonymous"/>
+// <img src="https://instagram.fiev22-2.fna.fbcdn.net/v/t51.2885-15/328440938_737202151313044_1722498512902579125_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fiev22-2.fna.fbcdn.net&_nc_cat=104&_nc_ohc=aK9RoFHydx0AX9XdVPI&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfBjy4tA3yljV4wFhCJMiRYfC_7qvkMWExv-IoHXTPfBYQ&oe=64607C1E&_nc_sid=8fd12b" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
+//       </div>
+//       <div class="modal-footer">
+//         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+//         <button type="button" class="btn btn-primary">Save changes</button>
+//       </div>
+//     </div>
+//   </div>
+// </div>`;
+// containerResult.insertBefore(divModal,footerResult);
+// }
 
 
 // function test() {
@@ -321,18 +332,18 @@ function showSlides(n, slideOfPost) {
 //   cards.setAttribute('class', 'card');
 //   cards.setAttribute('id', 'card-img');
 //   cards.setAttribute('style', 'width: 18rem;');
-//   cards.innerHTML = `<img src="../asset/favicon.ico" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-//   <div class="card-body">
+//   cards.innerHTML = `<div class="card-body">
 //     <h5 class="card-title">Card title</h5>
 //     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-//     <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#child-post-0">open First Modal</a>
+//     <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#exampleModal">open First Modal</a>
 //   </div>
 // </div>`;
 //   containerResult.insertBefore(cards, footerResult);
-//   childPostList();
+//   testModal();
+//   //childPostList();
 // }
 // test();
-// 
+
 
 /* <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
