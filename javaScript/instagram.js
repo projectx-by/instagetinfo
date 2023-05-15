@@ -88,7 +88,7 @@ function convertIdToUsername(res) {
 }
 function profile(res) {
   let profileDiv = document.createElement('div');
-  profileDiv.setAttribute('class', 'ca rd')
+  profileDiv.setAttribute('class', 'card')
   profileDiv.classList.add('mb-3');
   profileDiv.classList.add('mx-3');
   profileDiv.setAttribute('style', 'max-width: 500px; outline:none; border:none; background-color: #000;');
@@ -129,6 +129,30 @@ function profile(res) {
   let getImgSrc = document.getElementById('main-img').getAttribute('src');
   modalProfile(getImgSrc);
 }
+
+function currentStories(){
+  let divCurrentStories = document.createElement('div');
+  divCurrentStories.setAttribute('class','my-4');
+  divCurrentStories.classList.add('mx-3');
+  divCurrentStories.classList.add('rounded-circle');
+  divCurrentStories.classList.add('d-flex');
+  //divCurrentStories.classList.add('justify-content-center');
+  // divCurrentStories.classList.add('border');
+  // divCurrentStories.classList.add('border-danger');
+  divCurrentStories.classList.add('conic-gradient');
+  divCurrentStories.setAttribute('style','position:relative;overflow:hidden;width:200px;height:200px;');
+  divCurrentStories.innerHTML =`<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous">`;
+ containerResult.insertBefore(divCurrentStories,footerResult);
+}
+currentStories();
+
+
+
+
+
+
+
+
 
 function userPost(res) {
   let headerPost = document.createElement('h5');
