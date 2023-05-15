@@ -268,17 +268,21 @@ function modalVideo(postOrder, modalId) {
   divModal.innerHTML = `<div class="modal fade zoom" id="posts${modalId}" tabindex="-1" aria-labelledby="posts${modalId}Label" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-              <div class="modal-body d-flex justify-content-center">
-                <a href="${postOrder.video_url}" target="_blank" class="text-decoration-none text-dark">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                    <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
-                  </svg></a>
+              <div class="modal-body text-center" style="position:relative;">
+                <img src="${postOrder.display_url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="${postOrder.video_url}" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                 </svg></a>
               </div>
             </div>
           </div>
         </div>
-      </div>`;
+  //     </div>`;
+  // `<div class="mySlides my-fade my${modalId} text-center" style="position:relative;"><div class="text-dark fs-5">${indexChild + 1} / ${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="${resPostOrder[indexChild].node.video_url}" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+  //                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+  //                  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+  //                </svg></a></div>`
+
   containerResult.insertBefore(divModal, footerResult);
 }
 let slideIndex = 1;
