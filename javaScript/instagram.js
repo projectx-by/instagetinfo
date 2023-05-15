@@ -208,17 +208,10 @@ function userPost(res) {
   <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
 </svg></a></div>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
-        modalVideo(listPost[i].node,i);
-        
+        modalVideo(listPost[i].node, i);
+
       }
-      // document.getElementById(`details-${i}`).addEventListener('click', () => {
-      //   showSlides(slideIndex);
-      //   document.body.classList.add('all-blur');
-
-      // });
     }
-
-
   }
 }
 function childPostList(resPostOrder, modalId) {
@@ -238,40 +231,49 @@ function childPostList(resPostOrder, modalId) {
   for (indexChild = 0; indexChild < resPostOrder.length; indexChild++) {
     // console.log(resPostOrder[indexChild].node.display_url);
     let slideContent = document.createElement('div');
-    slideContent.innerHTML = `<div class="mySlides my-fade my${modalId}"><div class="numbertext">${indexChild + 1}/${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width: 100%" alt="post-child" crossorigin="anonymous"></div>`;
-    // slideContent.setAttribute('class', 'mySlides');
-    // slideContent.classList.add('my-fade');
-    // slideContent.innerHTML = `<div class="numbertext">${i + 1} / ${resPostOrder.length}</div><img src="${proxyHeroku}${resPostOrder[i].node.display_url}" style="width: 100%;">`;
+    if (resPostOrder[indexChild].node.__typename == 'GraphImage') {
+      slideContent.innerHTML = `<div class="mySlides my-fade my${modalId} text-center"><div class="text-dark fs-5">${indexChild + 1}/ ${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width:80%;" alt="post-child-img" crossorigin="anonymous"></div>`;
+    }
+    if (resPostOrder[indexChild].node.__typename == 'GraphVideo') {
+      slideContent.innerHTML = `<div class="mySlides my-fade my${modalId} text-center" style="position:relative;"><div class="text-dark fs-5">${indexChild + 1}/ ${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width:80%;" alt="post-child-img" crossorigin="anonymous"><a href="${resPostOrder[indexChild].node.video_url}" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                 </svg></a></div>`;
+
+      // `<div class="d-flex justify-content-center my${modalId}"><a href="${resPostOrder[indexChild].node.video_url}" target="_blank" class="text-decoration-none text-dark"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+      //             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+      //             <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+      //           </svg></a></div>`
+    }
     document.getElementById(`container-slide${modalId}`).appendChild(slideContent);
-    // console.log('this looping');
   }
   let pBtnControl = document.createElement('p');
   pBtnControl.innerHTML = `<a class="prev-button text-decoration-none bg-dark rounded-end text-white" onclick="plusSlides(-1,${modalId})"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
-</svg></a>
-<a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1,${modalId})"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-</svg></a>`;
+          <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
+        </svg></a>
+        <a class="next-button text-decoration-none bg-dark rounded-start text-white" onclick="plusSlides(1,${modalId})"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+        </svg></a>`;
   document.getElementById(`container-slide${modalId}`).appendChild(pBtnControl);
   console.log(document.getElementById(`container-slide${modalId}`).children);
 }
-function modalVideo(postOrder,modalId){
+function modalVideo(postOrder, modalId) {
   let divModal = document.createElement('div');
   divModal.innerHTML = `<div class="modal fade zoom" id="posts${modalId}" tabindex="-1" aria-labelledby="posts${modalId}Label" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body d-flex justify-content-center">
-      <a href="${postOrder.video_url}" target="_blank" class="text-decoration-none text-dark">
-          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
-</svg></a>
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body d-flex justify-content-center">
+                <a href="${postOrder.video_url}" target="_blank" class="text-decoration-none text-dark">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                  </svg></a>
+              </div>
+            </div>
           </div>
-      </div>
-    </div>
-  </div>
-</div>`;
-containerResult.insertBefore(divModal,footerResult);
+        </div>
+      </div>`;
+  containerResult.insertBefore(divModal, footerResult);
 }
 let slideIndex = 1;
 function plusSlides(n, slideOfPost) {
@@ -282,7 +284,7 @@ function currentSlide(n, slideOfPost) {
   showSlides(slideIndex = n, slideOfPost);
 }
 function showSlides(n, slideOfPost) {
-  let slides = document.getElementsByClassName(`my${slideOfPost}`);
+  let slides = document.getElementsByClassName(`my${slideOfPost} `);
   console.log(slides)
   if (n > slides.length) { slideIndex = 1 }
   if (n < 1) { slideIndex = slides.length }
@@ -297,7 +299,7 @@ function showSlides(n, slideOfPost) {
 
 // function testModal(){
 //   let divModal = document.createElement('div');
-//   divModal.innerHTML = `<!-- Modal -->
+//   divModal.innerHTML = `< !--Modal -->
 // <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 //   <div class="modal-dialog">
 //     <div class="modal-content">
