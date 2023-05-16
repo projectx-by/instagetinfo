@@ -115,6 +115,7 @@ async function executed() {
     },3000)
     if (responseApiStories.response.body.reels_media.length != 0) {
       document.getElementById('parent-main-profile').classList.add('conic-gradient');
+      currentStoriesModal(responseApiStories.response.body.reels_media,"stories")
     }else{
       let getImgSrc = document.getElementById('main-img').getAttribute('src');
       modalProfile(getImgSrc);
@@ -213,22 +214,46 @@ function modalProfile(res) {
 //   containerResult.insertBefore(divCurrentStories, footerResult);
 //   currentStoriesModal(res, username);
 // }
-function currentStoriesModal(res, username) {
+function currentStoriesModal(res,params) {
   let divModal = document.createElement('div');
-  divModal.innerHTML = `<div class="modal fade zoom" id="${username}Stories" tabindex="-1" aria-labelledby="${username}StoriesLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-body text-center" style="position:relative;">
-                <img src="" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
-                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
-                 </svg></a>
-              </div>
-            </div>
-          </div>
+  divModal.innerHTML = `<div class="modal fade zoom" id="stories-${params}" tabindex="-1" aria-labelledby="stories-${params}Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body" style="position:relative;">
+        <div class="container-slide" id="container-stories">
         </div>
-     </div>`;
-  containerResult.insertBefore(divModal, footerResult);
+      </div>
+    </div>
+  </div>
+</div>`;
+console.log(res[0].items.length);
+containerResult.insertBefore(divModal, footerResult);
+if(res[0].items.length > 1){
+  let containerSlideStories = document.getElementById(`container-stories`);
+  let btnPrev = document.createElement('a');
+  btnPrev.setAttribute('class','prev-button');
+  btnPrev.classList.add('bg-dark');
+  btnPrev.classList.add('rounded-end');
+  btnPrev.classList.add('text-white');
+  btnPrev.setAttribute('onclick',`plusSlides(-1,${params})`);
+  btnPrev.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
+        </svg>`;
+  containerSlideStories.appendChild(btnPrev);
+  let btnNext = document.createElement('a');
+  btnNext.setAttribute('class','next-button');
+  btnNext.classList.add('bg-dark');
+  btnNext.classList.add('rounded-end');
+  btnNext.classList.add('text-white');
+  btnNext.setAttribute('onclick',`plusSlides(1,${params})`);
+  btnNext.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+        </svg>`;
+  containerSlideStories.appendChild(btnNext);
+}
+let btnStories = document.getElementById('main-img');
+btnStories.setAttribute('data-bs-target',`#stories-${params}`);
+btnStories.setAttribute('data-bs-toggle',`modal`);
 }
 function userPost(res) {
   let headerPost = document.createElement('h5');
