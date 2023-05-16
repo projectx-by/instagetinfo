@@ -7,6 +7,7 @@ radioButtonDiv = document.getElementById('btn-radio');
 
 let getByUsername = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info';
 let getByID = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_info_by_id';
+let getStories = 'https://rocketapi-for-instagram.p.rapidapi.com/instagram/user/get_stories';
 let proxyHeroku = 'https://cors-anywhere.herokuapp.com/';
 
 
@@ -59,7 +60,7 @@ async function executed() {
     containerResult.appendChild(footerResult);
   }
   loadingEffect();
-  let responseAPI;
+  let responseAPI, responseApiStories;
   if (document.getElementById('input-username').checked == true) {
     responseAPI = await getInfo(getByUsername, userInfo)
   } else {
@@ -78,8 +79,22 @@ async function executed() {
     if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
       errorHandle();
     } else {
+      userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
+      responseApiStories = getStoriesUser(getStories, userInfo);
+      console.log(responseApiStories);
       profile(responseAPI);
       userPost(responseAPI);
+      let resultStories = async () => await responseApiStories.then(responseApiStories => {
+        console.log(responseApiStories)
+        if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
+          errorHandle()
+        } else if (responseApiStories.response.body.reels_media.length == 0) {
+
+        } else {
+          document.getElementById('parent-main-profile').classList.add('conic-gradient');
+        }
+      });
+      resultStories();
     }
   }, 5000);
 }
@@ -95,8 +110,8 @@ function profile(res) {
   profileDiv.setAttribute('id', 'profileDiv');
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
-      <div class="rounded-circle border border-dark" style="overflow: hidden; width: max-content;">
-        <img src="${res.response.body.data.user.profile_pic_url_hd}" class="img-fluid" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150px;cursor:pointer;" id="main-img">
+      <div class="rounded-circle d-flex" style="overflow: hidden; width: max-content;z-index:300 !important; position:relative;" id="parent-main-profile">
+        <img src="${res.response.body.data.user.profile_pic_url_hd}" class="rounded-circle my-1 mx-1" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150p x;cursor:pointer; z-index: 10000 !important;" id="main-img">
       </div>
     </div>
     <div class="col-md-8">
@@ -129,20 +144,65 @@ function profile(res) {
   let getImgSrc = document.getElementById('main-img').getAttribute('src');
   modalProfile(getImgSrc);
 }
-
-function currentStories(){
+function modalProfile(res) {
+  let popupModal = document.createElement('div');
+  popupModal.setAttribute('class', 'modal');
+  popupModal.classList.add('fade');
+  popupModal.classList.add('zoom');
+  popupModal.setAttribute('id', 'modalProfile');
+  popupModal.setAttribute('tabindex', '-1');
+  popupModal.setAttribute('aria-labelledby', 'modalProfileLabel');
+  popupModal.innerHTML = `<div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body" style="padding: 0px;">
+  <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
+    <div class="carousel-inner"> 
+      <div class="carousel-item active rounded-circle border border-dark" style="overflow:hidden; opacity: 1;" id="img-popup">
+        <img class="d-block w-100" alt="profile-picture" crossorigin="anonymous" id="img-popup" src="${res}">
+        </div>
+      </div>
+    </div>
+  </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  containerResult.insertBefore(popupModal, footerResult);
+  let setButtonPopup = document.getElementById('main-img');
+  setButtonPopup.setAttribute('data-bs-target', '#modalProfile');
+  setButtonPopup.setAttribute('data-bs-toggle', 'modal');
+  setButtonPopup.addEventListener('click', () => {
+    document.body.classList.add('all-blur');
+  })
+}
+function currentStories(res, username) {
   let divCurrentStories = document.createElement('div');
-  divCurrentStories.setAttribute('class','my-4');
+  divCurrentStories.setAttribute('class', 'my-4');
   divCurrentStories.classList.add('mx-3');
   divCurrentStories.classList.add('rounded-circle');
   divCurrentStories.classList.add('d-flex');
-  //divCurrentStories.classList.add('justify-content-center');
-  // divCurrentStories.classList.add('border');
-  // divCurrentStories.classList.add('border-danger');
   divCurrentStories.classList.add('conic-gradient');
-  divCurrentStories.setAttribute('style','position:relative;overflow:hidden;width:200px;height:200px;');
-  divCurrentStories.innerHTML =`<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous">`;
- containerResult.insertBefore(divCurrentStories,footerResult);
+  divCurrentStories.setAttribute('style', 'position:relative;overflow:hidden;width:max-content;');
+  divCurrentStories.innerHTML = `<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous" data-bs-target="#${username}Stories" data-bs-toggle="modal">`;
+  containerResult.insertBefore(divCurrentStories, footerResult);
+  currentStoriesModal(res, username);
+}
+function currentStoriesModal(res, username) {
+  let divModal = document.createElement('div');
+  divModal.innerHTML = `<div class="modal fade zoom" id="${username}Stories" tabindex="-1" aria-labelledby="${username}StoriesLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body text-center" style="position:relative;">
+                <img src="" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                 </svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+     </div>`;
+  containerResult.insertBefore(divModal, footerResult);
 }
 currentStories();
 
@@ -357,37 +417,6 @@ function showSlides(n, slideOfPost) {
 // }
 // test();
 
-function modalProfile(res) {
-  let popupModal = document.createElement('div');
-  popupModal.setAttribute('class', 'modal');
-  popupModal.classList.add('fade');
-  popupModal.classList.add('zoom');
-  popupModal.setAttribute('id', 'modalProfile');
-  popupModal.setAttribute('tabindex', '-1');
-  popupModal.setAttribute('aria-labelledby', 'modalProfileLabel');
-  popupModal.innerHTML = `<div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body" style="padding: 0px;">
-  <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
-    <div class="carousel-inner"> 
-      <div class="carousel-item active rounded-circle border border-dark" style="overflow:hidden; opacity: 1;" id="img-popup">
-        <img class="d-block w-100" alt="profile-picture" crossorigin="anonymous" id="img-popup" src="${res}">
-        </div>
-      </div>
-    </div>
-  </div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-  containerResult.insertBefore(popupModal, footerResult);
-  let setButtonPopup = document.getElementById('main-img');
-  setButtonPopup.setAttribute('data-bs-target', '#modalProfile');
-  setButtonPopup.setAttribute('data-bs-toggle', 'modal');
-  setButtonPopup.addEventListener('click', () => {
-    document.body.classList.add('all-blur');
-  })
-}
 function bodyClick(event) {
   if (event.target.id == 'modalProfile' || event.target.classList.contains('child-post') || event.target.classList.contains('zoom')) {
     document.body.classList.remove('all-blur');
@@ -433,4 +462,10 @@ function getInfo(url, user) {
   return fetch(url, user)
     .then(response => response.json())
     .then(response => response);
+}
+
+async function getStoriesUser(url, user) {
+  let result = await fetch(url, user)
+  result = result.json();
+  return result;
 }

@@ -1,19 +1,19 @@
-.conic-gradient:after {
+.conic-gradient:before {
   display: block;
   border-radius: 9999px;
   content: '';
   width: 110%;
   height: 110%;
   position: absolute;
-  z-index: -1;
+  z-index: 2 !important;
   left: -4%;
   top: -4%;
-  background-image: conic-gradient(#00AEEF, #fff, #00AEEF, #fff, #00AEEF);
+  background-image: conic-gradient(#FEDA77, #F58529, #DD2A7B, #F58529, #FEDA77, #DD2A7B, #F58529);
   animation: spin 5s linear infinite;
 }
 
-@keyframes spin { 
-  100% { 
+@keyframes spin {
+  100% {
     transform: rotate(360deg);
   }
 }
