@@ -60,43 +60,71 @@ async function executed() {
     containerResult.appendChild(footerResult);
   }
   loadingEffect();
-  let responseAPI, responseApiStories;
+  let responseAPI, responseApiStories, tempResponApi;
+  try {
   if (document.getElementById('input-username').checked == true) {
-    responseAPI = await getInfo(getByUsername, userInfo)
+    responseAPI = await getInfo(getByUsername, userInfo);
+    userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
+    responseApiStories = getStoriesUser(getStories, userInfo);
+    // console.log(responseAPI);
+    // console.log(responseApiStories);
   } else {
-    let tempResponApi = await getInfo(getByID, userInfo);
-    try {
+      tempResponApi = await getInfo(getByID, userInfo);
       convertIdToUsername(tempResponApi);
       responseAPI = await getInfo(getByUsername, userInfo)
-    } catch {
-      document.getElementById('loader').remove();
-      errorHandle()
-    };
-  }
-  console.log(responseAPI);
-  setTimeout(function () {
-    document.getElementById('loader').remove();
-    if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
-      errorHandle();
-    } else {
       userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
       responseApiStories = getStoriesUser(getStories, userInfo);
-      console.log(responseApiStories);
-      profile(responseAPI);
-      userPost(responseAPI);
-      let resultStories = async () => await responseApiStories.then(responseApiStories => {
-        console.log(responseApiStories)
-        if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
-          errorHandle()
-        } else if (responseApiStories.response.body.reels_media.length == 0) {
-
-        } else {
-          document.getElementById('parent-main-profile').classList.add('conic-gradient');
-        }
-      });
-      resultStories();
+      
+      
+      
+      
+      
+      //console.log(responseAPI);
+  //     setTimeout(function () {
+  //   // if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
+  //   //   errorHandle();
+  //   // } else {
+      
+  //     console.log(responseApiStories);
+  //     resultEnd = async () => await responseApiStories.then(responseApiStories => {
+  //       console.log(responseApiStories)
+  //       /*if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
+  //         errorHandle();*/
+  //       if (responseApiStories.response.body.reels_media.length == 0) {
+  //         profile(responseAPI);
+  //         userPost(responseAPI);
+  //       } else {
+  //         profile(responseAPI);
+  //         userPost(responseAPI);
+  //         document.getElementById('parent-main-profile').classList.add('conic-gradient');
+  //       }
+  //     });
+  //     resultEnd();
+  //   //}
+  // }, 5000);
     }
-  }, 5000);
+    responseApiStories = await responseApiStories.then(responseApiStories => responseApiStories);
+    console.log(responseAPI);
+    console.log(responseApiStories);
+    if(responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404){
+    profile(responseAPI);
+    userPost(responseAPI);
+    }
+    setTimeout(() =>{
+      document.getElementById('parent-main-profile').classList.remove('d-none');
+    },3000)
+    if (responseApiStories.response.body.reels_media.length != 0) {
+      document.getElementById('parent-main-profile').classList.add('conic-gradient');
+    }else{
+      let getImgSrc = document.getElementById('main-img').getAttribute('src');
+      modalProfile(getImgSrc);
+    }
+    removeLoadingEffect();
+  } catch(error) {
+      removeLoadingEffect();
+      console.log(error);
+      errorHandle();
+    };
 }
 function convertIdToUsername(res) {
   return userInfo.body = `{"username":"${res.response.body.user.username}"}`;
@@ -110,7 +138,7 @@ function profile(res) {
   profileDiv.setAttribute('id', 'profileDiv');
   profileDiv.innerHTML = `<div class="row g-0">
     <div class="col-md-4">
-      <div class="rounded-circle d-flex" style="overflow: hidden; width: max-content;z-index:300 !important; position:relative;" id="parent-main-profile">
+      <div class="rounded-circle d-flex d-none" style="overflow: hidden; width: max-content;z-index:300 !important; position:relative;" id="parent-main-profile">
         <img src="${res.response.body.data.user.profile_pic_url_hd}" class="rounded-circle my-1 mx-1" alt="profile-picture" crossorigin="anonymous" style="width: 150px; height:150p x;cursor:pointer; z-index: 10000 !important;" id="main-img">
       </div>
     </div>
@@ -141,8 +169,6 @@ function profile(res) {
       document.getElementById('card-body').insertBefore(pbioLinks, pbiography);
     }
   }
-  let getImgSrc = document.getElementById('main-img').getAttribute('src');
-  modalProfile(getImgSrc);
 }
 function modalProfile(res) {
   let popupModal = document.createElement('div');
@@ -175,18 +201,18 @@ function modalProfile(res) {
     document.body.classList.add('all-blur');
   })
 }
-function currentStories(res, username) {
-  let divCurrentStories = document.createElement('div');
-  divCurrentStories.setAttribute('class', 'my-4');
-  divCurrentStories.classList.add('mx-3');
-  divCurrentStories.classList.add('rounded-circle');
-  divCurrentStories.classList.add('d-flex');
-  divCurrentStories.classList.add('conic-gradient');
-  divCurrentStories.setAttribute('style', 'position:relative;overflow:hidden;width:max-content;');
-  divCurrentStories.innerHTML = `<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous" data-bs-target="#${username}Stories" data-bs-toggle="modal">`;
-  containerResult.insertBefore(divCurrentStories, footerResult);
-  currentStoriesModal(res, username);
-}
+// function currentStories(res, username) {
+//   let divCurrentStories = document.createElement('div');
+//   divCurrentStories.setAttribute('class', 'my-4');
+//   divCurrentStories.classList.add('mx-3');
+//   divCurrentStories.classList.add('rounded-circle');
+//   divCurrentStories.classList.add('d-flex');
+//   divCurrentStories.classList.add('conic-gradient');
+//   divCurrentStories.setAttribute('style', 'position:relative;overflow:hidden;width:max-content;');
+//   divCurrentStories.innerHTML = `<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous" data-bs-target="#${username}Stories" data-bs-toggle="modal">`;
+//   containerResult.insertBefore(divCurrentStories, footerResult);
+//   currentStoriesModal(res, username);
+// }
 function currentStoriesModal(res, username) {
   let divModal = document.createElement('div');
   divModal.innerHTML = `<div class="modal fade zoom" id="${username}Stories" tabindex="-1" aria-labelledby="${username}StoriesLabel" aria-hidden="true">
@@ -204,16 +230,6 @@ function currentStoriesModal(res, username) {
      </div>`;
   containerResult.insertBefore(divModal, footerResult);
 }
-currentStories();
-
-
-
-
-
-
-
-
-
 function userPost(res) {
   let headerPost = document.createElement('h5');
   headerPost.setAttribute('class', 'text-white');
@@ -437,15 +453,19 @@ function errorHandle() {
 function loadingEffect() {
   let loadingEvent = document.createElement("div");
   loadingEvent.setAttribute('id', 'loader');
-  loadingEvent.setAttribute('style', 'width:100%; height:100%; position:fixed; z-index:100;');
+  loadingEvent.setAttribute('style', 'width:100vw; height:100vh;position:fixed; z-index:100000;overflow:hidden;');
   loadingEvent.innerHTML = `<div class="loader">
   <div class="inner one"></div>
   <div class="inner two"></div>
   <div class="inner three"></div>
 </div>`;
-  containerResult.insertBefore(loadingEvent, footerResult);
+  document.body.insertBefore(loadingEvent, document.getElementById('container'));
+  document.body.classList.add('stop-scrolling');
 }
-
+function removeLoadingEffect(){
+  document.getElementById('loader').remove();
+  document.body.classList.remove('stop-scrolling');
+}
 let userInfo = {
   method: 'POST',
   mode: 'cors',

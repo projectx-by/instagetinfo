@@ -1,3 +1,7 @@
+.stop-scrolling{
+  height: 100vh;
+  overflow: hidden;
+}
 .conic-gradient:before {
   display: block;
   border-radius: 9999px;
