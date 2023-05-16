@@ -62,70 +62,71 @@ async function executed() {
   loadingEffect();
   let responseAPI, responseApiStories, tempResponApi;
   try {
-  if (document.getElementById('input-username').checked == true) {
-    responseAPI = await getInfo(getByUsername, userInfo);
-    userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
-    responseApiStories = getStoriesUser(getStories, userInfo);
-    // console.log(responseAPI);
-    // console.log(responseApiStories);
-  } else {
+    if (document.getElementById('input-username').checked == true) {
+      responseAPI = await getInfo(getByUsername, userInfo);
+      userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
+      responseApiStories = getStoriesUser(getStories, userInfo);
+      // console.log(responseAPI);
+      // console.log(responseApiStories);
+    } else {
       tempResponApi = await getInfo(getByID, userInfo);
       convertIdToUsername(tempResponApi);
       responseAPI = await getInfo(getByUsername, userInfo)
       userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
       responseApiStories = getStoriesUser(getStories, userInfo);
-      
-      
-      
-      
-      
+
+
+
+
+
       //console.log(responseAPI);
-  //     setTimeout(function () {
-  //   // if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
-  //   //   errorHandle();
-  //   // } else {
-      
-  //     console.log(responseApiStories);
-  //     resultEnd = async () => await responseApiStories.then(responseApiStories => {
-  //       console.log(responseApiStories)
-  //       /*if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
-  //         errorHandle();*/
-  //       if (responseApiStories.response.body.reels_media.length == 0) {
-  //         profile(responseAPI);
-  //         userPost(responseAPI);
-  //       } else {
-  //         profile(responseAPI);
-  //         userPost(responseAPI);
-  //         document.getElementById('parent-main-profile').classList.add('conic-gradient');
-  //       }
-  //     });
-  //     resultEnd();
-  //   //}
-  // }, 5000);
+      //     setTimeout(function () {
+      //   // if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
+      //   //   errorHandle();
+      //   // } else {
+
+      //     console.log(responseApiStories);
+      //     resultEnd = async () => await responseApiStories.then(responseApiStories => {
+      //       console.log(responseApiStories)
+      //       /*if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
+      //         errorHandle();*/
+      //       if (responseApiStories.response.body.reels_media.length == 0) {
+      //         profile(responseAPI);
+      //         userPost(responseAPI);
+      //       } else {
+      //         profile(responseAPI);
+      //         userPost(responseAPI);
+      //         document.getElementById('parent-main-profile').classList.add('conic-gradient');
+      //       }
+      //     });
+      //     resultEnd();
+      //   //}
+      // }, 5000);
     }
     responseApiStories = await responseApiStories.then(responseApiStories => responseApiStories);
     console.log(responseAPI);
     console.log(responseApiStories);
-    if(responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404){
-    profile(responseAPI);
-    userPost(responseAPI);
+    if (responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404) {
+      profile(responseAPI);
+      userPost(responseAPI);
     }
-    setTimeout(() =>{
+    setTimeout(() => {
       document.getElementById('parent-main-profile').classList.remove('d-none');
-    },3000)
+    }, 3000)
     if (responseApiStories.response.body.reels_media.length != 0) {
       document.getElementById('parent-main-profile').classList.add('conic-gradient');
-      currentStoriesModal(responseApiStories.response.body.reels_media,"stories")
-    }else{
+      currentStoriesModal(responseApiStories.response.body.reels_media, "stories")
+      document.getElementById('main-img').setAttribute('onclick', 'showSlides(1,"stories")');
+    } else {
       let getImgSrc = document.getElementById('main-img').getAttribute('src');
       modalProfile(getImgSrc);
     }
     removeLoadingEffect();
-  } catch(error) {
-      removeLoadingEffect();
-      console.log(error);
-      errorHandle();
-    };
+  } catch (error) {
+    removeLoadingEffect();
+    console.log(error);
+    errorHandle();
+  };
 }
 function convertIdToUsername(res) {
   return userInfo.body = `{"username":"${res.response.body.user.username}"}`;
@@ -214,7 +215,7 @@ function modalProfile(res) {
 //   containerResult.insertBefore(divCurrentStories, footerResult);
 //   currentStoriesModal(res, username);
 // }
-function currentStoriesModal(res,params) {
+function currentStoriesModal(res, params) {
   let divModal = document.createElement('div');
   divModal.innerHTML = `<div class="modal fade zoom" id="stories-${params}" tabindex="-1" aria-labelledby="stories-${params}Label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -226,34 +227,51 @@ function currentStoriesModal(res,params) {
     </div>
   </div>
 </div>`;
-console.log(res[0].items.length);
-containerResult.insertBefore(divModal, footerResult);
-if(res[0].items.length > 1){
+  // console.log(res[0].items.length);
+  containerResult.insertBefore(divModal, footerResult);
   let containerSlideStories = document.getElementById(`container-stories`);
-  let btnPrev = document.createElement('a');
-  btnPrev.setAttribute('class','prev-button');
-  btnPrev.classList.add('bg-dark');
-  btnPrev.classList.add('rounded-end');
-  btnPrev.classList.add('text-white');
-  btnPrev.setAttribute('onclick',`plusSlides(-1,${params})`);
-  btnPrev.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+  let listStories = res[0].items;
+  for (i = 0; i < listStories.length; i++) {
+    let slideContent = document.createElement('div');
+    if (listStories[i].hasOwnProperty('video_versions')) {
+      console.log(`${i} is videos`)
+      console.log(listStories[i]);
+      slideContent.innerHTML = `<div class="mySlides my-fade my${params} text-center" style="position:relative;"><div class="text-dark fs-5">${i + 1} / ${listStories.length}</div><img src="${listStories[i].image_versions2.candidates[0].url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="${listStories[i].video_versions[0].url}" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                   <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
+                 </svg></a></div>`;
+    } else {
+      console.log(listStories[i])
+      console.log(`${i} is images`)
+      slideContent.innerHTML = `<div class="mySlides my-fade my${params} text-center"><div class="text-dark fs-5">${i + 1} / ${listStories.length}</div><img src="${listStories[i].image_versions2.candidates[0].url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"></div>`;
+    }
+    containerSlideStories.appendChild(slideContent);
+  }
+  if (res[0].items.length > 1) {
+    let btnPrev = document.createElement('a');
+    btnPrev.setAttribute('class', 'prev-button');
+    btnPrev.classList.add('bg-dark');
+    btnPrev.classList.add('rounded-end');
+    btnPrev.classList.add('text-white');
+    btnPrev.setAttribute('onclick', `plusSlides(-1,"stories")`);
+    btnPrev.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z" />
         </svg>`;
-  containerSlideStories.appendChild(btnPrev);
-  let btnNext = document.createElement('a');
-  btnNext.setAttribute('class','next-button');
-  btnNext.classList.add('bg-dark');
-  btnNext.classList.add('rounded-end');
-  btnNext.classList.add('text-white');
-  btnNext.setAttribute('onclick',`plusSlides(1,${params})`);
-  btnNext.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+    containerSlideStories.appendChild(btnPrev);
+    let btnNext = document.createElement('a');
+    btnNext.setAttribute('class', 'next-button');
+    btnNext.classList.add('bg-dark');
+    btnNext.classList.add('rounded-end');
+    btnNext.classList.add('text-white');
+    btnNext.setAttribute('onclick', `plusSlides(1,"stories")`);
+    btnNext.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
         </svg>`;
-  containerSlideStories.appendChild(btnNext);
-}
-let btnStories = document.getElementById('main-img');
-btnStories.setAttribute('data-bs-target',`#stories-${params}`);
-btnStories.setAttribute('data-bs-toggle',`modal`);
+    containerSlideStories.appendChild(btnNext);
+  }
+  let btnStories = document.getElementById('main-img');
+  btnStories.setAttribute('data-bs-target', `#stories-${params}`);
+  btnStories.setAttribute('data-bs-toggle', `modal`);
 }
 function userPost(res) {
   let headerPost = document.createElement('h5');
@@ -487,7 +505,7 @@ function loadingEffect() {
   document.body.insertBefore(loadingEvent, document.getElementById('container'));
   document.body.classList.add('stop-scrolling');
 }
-function removeLoadingEffect(){
+function removeLoadingEffect() {
   document.getElementById('loader').remove();
   document.body.classList.remove('stop-scrolling');
 }
