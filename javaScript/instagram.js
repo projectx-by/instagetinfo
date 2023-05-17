@@ -237,17 +237,13 @@ function userPost(res) {
     bodyPost.classList.add('mx-3');
     bodyPost.classList.add('bg-dark');
     bodyPost.classList.add('rounded');
+    bodyPost.classList.add('d-flex');
+    bodyPost.classList.add('justify-content-center');
     bodyPost.setAttribute('id', 'body-post');
     bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none;');
-    bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body text-white" id="card-body">
-        <p class="card-text text-center">No Post Here</p>
-      </div>
-    </div>
-  </div>`
+    bodyPost.innerHTML = `<div class="card-body text-white" id="card-body">
+        <p class="card-text">No Post Here</p>
+      </div>`
     containerResult.insertBefore(bodyPost, footerResult);
   } else {
     for (i = 0; i < listPost.length; i++) {
