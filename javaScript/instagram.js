@@ -66,49 +66,14 @@ async function executed() {
       responseAPI = await getInfo(getByUsername, userInfo);
       userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
       responseApiStories = getStoriesUser(getStories, userInfo);
-      // console.log(responseAPI);
-      // console.log(responseApiStories);
     } else {
       tempResponApi = await getInfo(getByID, userInfo);
       convertIdToUsername(tempResponApi);
       responseAPI = await getInfo(getByUsername, userInfo)
       userInfo.body = `{"ids": [${responseAPI.response.body.data.user.id}]}`;
       responseApiStories = getStoriesUser(getStories, userInfo);
-
-
-
-
-
-      //console.log(responseAPI);
-      //     setTimeout(function () {
-      //   // if (responseAPI.status == 'timeout' || responseAPI.status == 'error' || responseAPI.response.status_code == 404) {
-      //   //   errorHandle();
-      //   // } else {
-
-      //     console.log(responseApiStories);
-      //     resultEnd = async () => await responseApiStories.then(responseApiStories => {
-      //       console.log(responseApiStories)
-      //       /*if (responseApiStories.status == 'timeout' || responseApiStories == 'error' || responseApiStories.response.status_code == 404) {
-      //         errorHandle();*/
-      //       if (responseApiStories.response.body.reels_media.length == 0) {
-      //         profile(responseAPI);
-      //         userPost(responseAPI);
-      //       } else {
-      //         profile(responseAPI);
-      //         userPost(responseAPI);
-      //         document.getElementById('parent-main-profile').classList.add('conic-gradient');
-      //       }
-      //     });
-      //     resultEnd();
-      //   //}
-      // }, 5000);
     }
     responseApiStories = await responseApiStories.then(responseApiStories => responseApiStories);
-    console.log(responseAPI);
-    console.log(responseApiStories);
-    // if (responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404) {
-      
-    // }
     if (responseApiStories.response.body.reels_media.length != 0) {
       profile(responseAPI);
       userPost(responseAPI);
@@ -127,7 +92,6 @@ async function executed() {
     removeLoadingEffect();
   } catch (error) {
     removeLoadingEffect();
-    console.log(error);
     errorHandle();
   };
 }
@@ -206,18 +170,6 @@ function modalProfile(res) {
     document.body.classList.add('all-blur');
   })
 }
-// function currentStories(res, username) {
-//   let divCurrentStories = document.createElement('div');
-//   divCurrentStories.setAttribute('class', 'my-4');
-//   divCurrentStories.classList.add('mx-3');
-//   divCurrentStories.classList.add('rounded-circle');
-//   divCurrentStories.classList.add('d-flex');
-//   divCurrentStories.classList.add('conic-gradient');
-//   divCurrentStories.setAttribute('style', 'position:relative;overflow:hidden;width:max-content;');
-//   divCurrentStories.innerHTML = `<img src="../asset/favicon.ico" class="rounded-circle mx-1 my-1" alt="current-stories" crossorigin="anonymous" data-bs-target="#${username}Stories" data-bs-toggle="modal">`;
-//   containerResult.insertBefore(divCurrentStories, footerResult);
-//   currentStoriesModal(res, username);
-// }
 function currentStoriesModal(res, params) {
   let divModal = document.createElement('div');
   divModal.innerHTML = `<div class="modal fade zoom" id="stories-${params}" tabindex="-1" aria-labelledby="stories-${params}Label" aria-hidden="true">
@@ -230,22 +182,17 @@ function currentStoriesModal(res, params) {
     </div>
   </div>
 </div>`;
-  // console.log(res[0].items.length);
   containerResult.insertBefore(divModal, footerResult);
   let containerSlideStories = document.getElementById(`container-stories`);
   let listStories = res[0].items;
   for (i = 0; i < listStories.length; i++) {
     let slideContent = document.createElement('div');
     if (listStories[i].hasOwnProperty('video_versions')) {
-      console.log(`${i} is videos`)
-      console.log(listStories[i]);
       slideContent.innerHTML = `<div class="mySlides my-fade my${params} text-center" style="position:relative;"><div class="text-dark fs-5">${i + 1} / ${listStories.length}</div><img src="${listStories[i].image_versions2.candidates[0].url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"><a href="${listStories[i].video_versions[0].url}" target="_blank" class="text-decoration-none text-white" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                    <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
                  </svg></a></div>`;
     } else {
-      console.log(listStories[i])
-      console.log(`${i} is images`)
       slideContent.innerHTML = `<div class="mySlides my-fade my${params} text-center"><div class="text-dark fs-5">${i + 1} / ${listStories.length}</div><img src="${listStories[i].image_versions2.candidates[0].url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"></div>`;
     }
     containerSlideStories.appendChild(slideContent);
@@ -311,7 +258,6 @@ function userPost(res) {
       bodyPost.classList.add('rounded');
       bodyPost.setAttribute('id', 'body-post');
       bodyPost.setAttribute('style', 'max-width: 90vw; outline: none; border: none; position: relative;');
-
       bodyPost.innerHTML = `<div class="row g-0 mx-2 my-2">
     <div class="col-md-4">
       <img src="${listPost[i].node.thumbnail_resources[4].src}"class="img-fluid" alt="post-images" crossorigin="anonymous">
@@ -328,9 +274,7 @@ function userPost(res) {
       let caption = document.getElementById(`caption${i}`);
       caption.textContent == 'null' ? caption.textContent = '' : caption.textContent = listPost[i].node.accessibility_caption;
       listPost[i].node.edge_media_to_caption.edges.length == 0 ? document.getElementById(`node-text${i}`).textContent = '' : document.getElementById(`node-text${i}`).textContent = listPost[i].node.edge_media_to_caption.edges[0].node.text;
-
       if (listPost[i].node.__typename == 'GraphSidecar') {
-        // childPostList(listPost[i].node.edge_sidecar_to_children);
         let childList = listPost[i].node.edge_sidecar_to_children.edges;
         let pBtnDetails = document.createElement('p');
         pBtnDetails.setAttribute('class', 'd-flex');
@@ -347,7 +291,6 @@ function userPost(res) {
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
         childPostList(childList, i);
       }
-
       if (listPost[i].node.__typename == 'GraphVideo') {
         let pBtnDetails = document.createElement('p');
         pBtnDetails.innerHTML = `<div class="flex justify-content-end blink_icon" style="position: absolute;bottom:2px;right:5px;z-index:100;cursor:pointer;" data-bs-target="#posts${i}" data-bs-toggle="modal"><!--<a href="${listPost[i].node.video_url}" class="text-decoration-none text-white" target="_blank">--><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
@@ -355,7 +298,6 @@ function userPost(res) {
 </svg></a></div>`;
         document.getElementById(`card-body-${i}`).appendChild(pBtnDetails);
         modalVideo(listPost[i].node, i);
-
       }
     }
   }
@@ -380,7 +322,6 @@ function childPostList(resPostOrder, modalId) {
 </div>`;
   containerResult.insertBefore(divModal, footerResult);
   for (indexChild = 0; indexChild < resPostOrder.length; indexChild++) {
-    // console.log(resPostOrder[indexChild].node.display_url);
     let slideContent = document.createElement('div');
     if (resPostOrder[indexChild].node.__typename == 'GraphImage') {
       slideContent.innerHTML = `<div class="mySlides my-fade my${modalId} text-center"><div class="text-dark fs-5">${indexChild + 1} / ${resPostOrder.length}</div><img src="${resPostOrder[indexChild].node.display_url}" style="width:85%;" alt="post-child-img" crossorigin="anonymous"></div>`;
@@ -429,56 +370,6 @@ function showSlides(n, slideOfPost) {
   slides[slideIndex - 1].style.display = "block";
 
 }
-
-// function testModal(){
-//   let divModal = document.createElement('div');
-//   divModal.innerHTML = `< !--Modal -->
-// <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-//   <div class="modal-dialog">
-//     <div class="modal-content">
-//       <div class="modal-header">
-//         <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-//         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-//       </div>
-//       <div class="modal-body">
-//         <h1>The video autoplay attribute</h1>
-// <video width="320" height="240" controls autoplay>
-//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/mp4" crossorigin="anonymous">
-//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/ogg" crossorigin="anonymous">
-//   <source src="https://scontent-iev1-1.cdninstagram.com/v/t50.2886-16/346899966_807346107014998_5613202220653110911_n.mp4?_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=tHBeckh-nyoAX9X7Wj0&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfC-qpIPJq-ZKnOeaFHHg8DEGRBGTMJJcwWDkGjSKksyAA&oe=646284BF&_nc_sid=8fd12b" type="video/webm" crossorigin="anonymous">
-//   Your browser does not support the video tag.
-// </video>
-// <img src="" crossorigin="anonymous"/>
-// <img src="https://instagram.fiev22-2.fna.fbcdn.net/v/t51.2885-15/328440938_737202151313044_1722498512902579125_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fiev22-2.fna.fbcdn.net&_nc_cat=104&_nc_ohc=aK9RoFHydx0AX9XdVPI&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfBjy4tA3yljV4wFhCJMiRYfC_7qvkMWExv-IoHXTPfBYQ&oe=64607C1E&_nc_sid=8fd12b" class="card-img-top" alt="..." crossorigin="anonymous" id="main-img">
-//       </div>
-//       <div class="modal-footer">
-//         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-//         <button type="button" class="btn btn-primary">Save changes</button>
-//       </div>
-//     </div>
-//   </div>
-// </div>`;
-// containerResult.insertBefore(divModal,footerResult);
-// }
-
-
-// function test() {
-//   let cards = document.createElement('div');
-//   cards.setAttribute('class', 'card');
-//   cards.setAttribute('id', 'card-img');
-//   cards.setAttribute('style', 'width: 18rem;');
-//   cards.innerHTML = `<div class="card-body">
-//     <h5 class="card-title">Card title</h5>
-//     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-//     <a href="#" class="btn btn-primary" id="details" data-bs-toggle="modal" data-bs-target="#exampleModal">open First Modal</a>
-//   </div>
-// </div>`;
-//   containerResult.insertBefore(cards, footerResult);
-//   testModal();
-//   //childPostList();
-// }
-// test();
-
 function bodyClick(event) {
   if (event.target.id == 'modalProfile' || event.target.classList.contains('child-post') || event.target.classList.contains('zoom')) {
     document.body.classList.remove('all-blur');
