@@ -106,21 +106,24 @@ async function executed() {
     responseApiStories = await responseApiStories.then(responseApiStories => responseApiStories);
     console.log(responseAPI);
     console.log(responseApiStories);
-    if (responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404) {
+    // if (responseApiStories.status != 'timeout' && responseApiStories != 'error' && responseApiStories.status_code != 404) {
+      
+    // }
+    if (responseApiStories.response.body.reels_media.length != 0) {
       profile(responseAPI);
       userPost(responseAPI);
-    }
-    setTimeout(() => {
-      document.getElementById('parent-main-profile').classList.remove('d-none');
-    }, 3000)
-    if (responseApiStories.response.body.reels_media.length != 0) {
       document.getElementById('parent-main-profile').classList.add('conic-gradient');
       currentStoriesModal(responseApiStories.response.body.reels_media, "stories")
       document.getElementById('main-img').setAttribute('onclick', 'showSlides(1,"stories")');
     } else {
+      profile(responseAPI);
+      userPost(responseAPI);
       let getImgSrc = document.getElementById('main-img').getAttribute('src');
       modalProfile(getImgSrc);
     }
+    setTimeout(() => {
+      document.getElementById('parent-main-profile').classList.remove('d-none');
+    }, 3000)
     removeLoadingEffect();
   } catch (error) {
     removeLoadingEffect();
